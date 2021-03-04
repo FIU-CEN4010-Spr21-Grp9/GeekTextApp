@@ -1,9 +1,5 @@
 package GeekTextApp;
 
-//import javax.persistence.*;
-//import java.util.ArrayList;
-//import java.util.List;
-
 /**
 *  Title: Book
 *  Semester: CEN4010 - Spring 2021
@@ -16,6 +12,7 @@ package GeekTextApp;
 * project for group 9
 * 
 */
+
 public class Book
 {
 	private Integer bookID;

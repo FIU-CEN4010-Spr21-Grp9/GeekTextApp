@@ -9,20 +9,39 @@ import javax.swing.JFrame;
 * I affirm that this program is entirely my own work and none of it is the work
 * of any other person. 
 * 
-* This class provides the entry point into the GeekText GUI 
+* This class provides the main code points to access each feature area of GeekText
 * 
 */
 
 // main entry point
 public class GeekTextApp
 {
-	public static void main(String[] args)
+	// private variables
+	private String rootURL;
+	
+	// constructors
+	public GeekTextApp(String rootURL)
 	{
-		// Creates ConverterFrame and its components
-		GeekTextFrame convFrame = new GeekTextFrame();
-
-		convFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		convFrame.pack();
-		convFrame.setVisible(true);
+		// root URL
+		this.rootURL = rootURL;
 	}
+	
+	// browsing
+	
+	
+	// user profile
+	
+	
+	// shopping cart
+	
+	
+	// book details
+	
+	
+	// book rating and comments
+	
+	
+	// wish list
+	
+	
 }
