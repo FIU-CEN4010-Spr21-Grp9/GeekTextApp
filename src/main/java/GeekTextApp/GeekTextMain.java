@@ -24,6 +24,7 @@ public class GeekTextMain
 		GeekTextFrame geekFrame = new GeekTextFrame(ROOT_URL);
 
 		geekFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		geekFrame.setSize(400,400);
 		geekFrame.pack();
 		geekFrame.setVisible(true);
 	}

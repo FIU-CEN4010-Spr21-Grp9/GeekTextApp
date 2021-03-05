@@ -5,6 +5,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
+
 import javax.swing.*;
 
 /**
@@ -28,6 +30,9 @@ public class GeekTextFrame extends JFrame implements ActionListener
 	// frame stuff
 	private JLabel geekLabel;
 	private JButton browseButton;
+	private JTable bookResultsTable;
+	
+	private GridBagConstraints layoutConst = null;
 	
 	// constructors
 	public GeekTextFrame(String rootURL)
@@ -37,10 +42,7 @@ public class GeekTextFrame extends JFrame implements ActionListener
 		
 		// declare new GeekTextApp
 		geekText = new GeekTextApp(rootURL);
-	      
-		// declare layout manager
-		GridBagConstraints layoutConst = null;
-	      
+
 		// set layout items
 		setTitle("Geek Text");
 	      
@@ -64,8 +66,10 @@ public class GeekTextFrame extends JFrame implements ActionListener
 		layoutConst = new GridBagConstraints();
 		layoutConst.insets = new Insets(10, 10, 10, 10);
 		layoutConst.gridx = 0;
-		layoutConst.gridy = 3;
+		layoutConst.gridy = 1;
 		add(browseButton, layoutConst);
+		
+		
 		
 	}
 	
@@ -73,6 +77,13 @@ public class GeekTextFrame extends JFrame implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent event)
 	{
+		JTable bookResultsTable = geekText.BrowseTopSellers();
 		
+		// booksTbl
+		layoutConst = new GridBagConstraints();
+		layoutConst.insets = new Insets(10, 10, 10, 10);
+		layoutConst.gridx = 0;
+		layoutConst.gridy = 2;
+		add(bookResultsTable, layoutConst);
 	}
 }

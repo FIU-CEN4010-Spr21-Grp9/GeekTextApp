@@ -1,5 +1,7 @@
 package GeekTextApp;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
 *  Title: Book
 *  Semester: CEN4010 - Spring 2021
@@ -13,6 +15,7 @@ package GeekTextApp;
 * 
 */
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Book
 {
 	private Integer bookID;
