@@ -76,6 +76,9 @@ public class Book
 	// title //
 	public String getTitle()
 	{
+		// Do something to remove the leading and trailing double quote
+		//title = title.replaceAll("^\"|\"$", "");
+		
 		return title;
 	}
 	

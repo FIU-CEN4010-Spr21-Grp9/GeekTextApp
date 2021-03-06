@@ -1,15 +1,20 @@
 package GeekTextApp;
 
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JTable;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -31,25 +36,40 @@ import org.springframework.web.client.RestTemplate;
 public class BookBrowser
 {
 	// private variables
+	//private int genreID;
+	//private int authorID;
+	//private int rating;
 	private int curPage;
 	private int maxPage;
 	private int rowsPerPage;
 	private String rootURL;
 	private String fullURL;
 	private List<Book> books;
+	private GenreList genreList;
 	private final RestTemplate restTemplate = new RestTemplate();
 	
 	// constructors
 	public BookBrowser(String rootURL)
 	{
+		// internal values
+		this.rowsPerPage = 20;
+		this.curPage = 1;
+		//this.genreID = 0;
+		//this.rating = 0;
+				
 		// root URL
 		this.rootURL = rootURL;
 		
-		this.rowsPerPage = 20;
-		this.curPage = 1;
+		// get genres list for browsing
+		genreList = new GenreList(rootURL);
 		
-		// default to top sellers until other option is picked
+		// default to top sellers until another option is picked
 		ListBooksByTopSellers();
+		
+		// Test other book browsing (before GUI code is fully implemented)
+		// ListBooksByGenreId(1);
+		// ListBooksByAuthorId(179677); // Chris' code not merged yet
+		// ListBooksByRating(3);
 	}
 	
 	// functions
@@ -61,8 +81,53 @@ public class BookBrowser
 		List<Book> curPageBooks = GetBooksForCurPage();
 		
 		returnTable = new JTable(new BookTable(curPageBooks));
+		resizeColumnWidth(returnTable);
 		
 		return returnTable;
+	}
+	
+	// RESIZER
+	public void resizeColumnWidth(JTable table)
+	{
+	    final TableColumnModel columnModel = table.getColumnModel();
+	    
+	    for (int column = 0; column < table.getColumnCount(); column++)
+	    {
+	        int width = 15; // Min width
+	        
+	        for (int row = 0; row < table.getRowCount(); row++)
+	        {
+	            TableCellRenderer renderer = table.getCellRenderer(row, column);
+	            Component comp = table.prepareRenderer(renderer, row, column);
+	            width = Math.max(comp.getPreferredSize().width +1 , width);
+	        }
+	        
+	        if(width > 300)
+	        {
+	            width=300;
+	        }
+	        
+	        columnModel.getColumn(column).setPreferredWidth(width);
+	    }
+	}
+	
+	// return genre list to filter drop down
+	public String[] GetGenreList()
+	{
+		return genreList.FillGenreComboBox();
+	}
+	
+	// return page list to filter drop down
+	public String[] GetPageList()
+	{
+		String[] pageListArray= new String[GetMaxPageNum()];
+		
+		for(int i = 1; i <= GetMaxPageNum(); i++)
+		{
+			pageListArray[(i - 1)] = String.valueOf(i);
+		}
+		
+		return pageListArray;
 	}
 	
 	// get max page #
@@ -97,7 +162,15 @@ public class BookBrowser
 		if(curPage == 1)
 		{
 			x = 1;
-			y = rowsPerPage;
+			
+			if(curPage == maxPage)
+			{
+				y = books.size();
+			}
+			else
+			{
+				y = rowsPerPage;
+			}
 		}
 		else if (curPage == maxPage)
 		{
@@ -109,6 +182,10 @@ public class BookBrowser
 			x = (curPage * rowsPerPage) + 1;
 			y = (curPage +1) * rowsPerPage;
 		}
+		
+		// offset "rows numbers" to zero-based list values
+		x--;
+		//y--;
 		
 		return books.subList(x, y);
 	}
@@ -147,12 +224,78 @@ public class BookBrowser
 	}
 	
 	// list by author
-	
+	public void ListBooksByAuthorId(Integer authorID)
+	{
+		fullURL = rootURL + "/books/query/viaproc/byauthor?authorID={id}";
+		
+		ResponseEntity<List<Book>> responseEntity = restTemplate.exchange(
+				fullURL,
+			    HttpMethod.GET,
+			    null,
+			    new ParameterizedTypeReference<List<Book>>() {}
+				, authorID
+			  );
+
+		// empty the list in case it is not our first search
+		if(books != null)
+		{
+			books.clear();
+		}
+		
+		books = responseEntity.getBody();
+		
+		curPage = 1;
+		maxPage = GetMaxPageNum();
+	}
 	
 	// list by genre
+	public void ListBooksByGenreId(Integer genreID)
+	{
+		fullURL = rootURL + "/books/query/viaproc/bygenre?genreID={id}";
+		
+		ResponseEntity<List<Book>> responseEntity = restTemplate.exchange(
+				fullURL,
+			    HttpMethod.GET,
+			    null,
+			    new ParameterizedTypeReference<List<Book>>() {}
+				, genreID
+			  );
+
+		// empty the list in case it is not our first search
+		if(books != null)
+		{
+			books.clear();
+		}
+		
+		books = responseEntity.getBody();
+		
+		curPage = 1;
+		maxPage = GetMaxPageNum();
+	}
 	
 	
 	// list by rating
-	
-	
+	public void ListBooksByRating(Integer rating)
+	{
+		fullURL = rootURL + "/books/query/viaproc/byrating?rating={rating}";
+		
+		ResponseEntity<List<Book>> responseEntity = restTemplate.exchange(
+				fullURL,
+			    HttpMethod.GET,
+			    null,
+			    new ParameterizedTypeReference<List<Book>>() {}
+				, rating
+			  );
+
+		// empty the list in case it is not our first search
+		if(books != null)
+		{
+			books.clear();
+		}
+		
+		books = responseEntity.getBody();
+		
+		curPage = 1;
+		maxPage = GetMaxPageNum();
+	}	
 }

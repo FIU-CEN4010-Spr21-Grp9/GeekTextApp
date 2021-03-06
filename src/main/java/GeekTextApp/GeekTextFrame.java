@@ -1,13 +1,12 @@
 package GeekTextApp;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.*;
+import javax.swing.GroupLayout.Alignment;
 
 /**
 *  Title: GeekTextApp
@@ -23,14 +22,12 @@ import javax.swing.*;
 public class GeekTextFrame extends JFrame implements ActionListener
 {
 	// private variables
-	// private char userOpt;
-	private GeekTextApp geekText;
 	private String rootURL;
 	
 	// frame stuff
 	private JLabel geekLabel;
 	private JButton browseButton;
-	private JTable bookResultsTable;
+	private JPanel mainViewPane;
 	
 	private GridBagConstraints layoutConst = null;
 	
@@ -39,51 +36,67 @@ public class GeekTextFrame extends JFrame implements ActionListener
 	{
 		// root URL
 		this.rootURL = rootURL;
-		
-		// declare new GeekTextApp
-		geekText = new GeekTextApp(rootURL);
 
 		// set layout items
 		setTitle("Geek Text");
 	      
 		// labels
-		geekLabel = new JLabel("Geek Text Test");
+		geekLabel = new JLabel("Geek Text Application");
+		
+		/// buttons panel ///
 		
 		// buttons
 		browseButton = new JButton("Browse Books");
 		browseButton.addActionListener(this);
 		
-		// build layout
-		setLayout(new GridBagLayout());
-	      
-		layoutConst = new GridBagConstraints();
-		layoutConst.insets = new Insets(10, 10, 10, 1);
-		layoutConst.gridx = 0;
-		layoutConst.gridy = 0;
-		add(geekLabel, layoutConst);
+		// browsing pane
+		mainViewPane = new BookBrowsePane(rootURL);
 		
-		// browse button
-		layoutConst = new GridBagConstraints();
-		layoutConst.insets = new Insets(10, 10, 10, 10);
-		layoutConst.gridx = 0;
-		layoutConst.gridy = 1;
-		add(browseButton, layoutConst);
+		// WYSIWYG CODE
+		GroupLayout groupLayout = new GroupLayout(getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(12)
+					.addComponent(geekLabel))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(10)
+					.addComponent(browseButton)
+					.addGap(20)
+					.addComponent(mainViewPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(10)
+					.addComponent(geekLabel)
+					.addGap(20)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(18)
+							.addComponent(browseButton))
+						.addComponent(mainViewPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+		);
+		getContentPane().setLayout(groupLayout);
 		
-		
-		
+		// make it visible
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.pack();
+		this.setVisible(true);
+		//this.setSize(width, height);
 	}
 	
 	// button code
 	@Override
 	public void actionPerformed(ActionEvent event)
 	{
-		JTable bookResultsTable = geekText.BrowseTopSellers();
+		mainViewPane = new BookBrowsePane(rootURL);
 		
 		// booksTbl
 		layoutConst = new GridBagConstraints();
 		layoutConst.insets = new Insets(10, 10, 10, 10);
-		layoutConst.gridx = 0;
-		layoutConst.gridy = 2;
-		add(bookResultsTable, layoutConst);
+		layoutConst.gridx = 1;
+		layoutConst.gridy = 1;
+		getContentPane().add(mainViewPane, layoutConst);
 	}
 }

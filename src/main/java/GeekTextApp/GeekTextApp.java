@@ -19,43 +19,11 @@ import javax.swing.JTable;
 // main entry point
 public class GeekTextApp
 {
-	// private variables
-	private String rootURL;
-	private BookBrowser booksList;
+private static String ROOT_URL = "http://localhost:8080";
 	
-	// constructors
-	public GeekTextApp(String rootURL)
+	public static void main(String[] args)
 	{
-		// root URL
-		this.rootURL = rootURL;
-		booksList = new BookBrowser(rootURL);
-	}
-	
-	// browsing
-	public JTable BrowseTopSellers()
-	{
-		JTable returnTable;
-		
-		booksList.ListBooksByTopSellers();
-		
-		returnTable = booksList.BrowseBooksByPage();
-		
-		return returnTable;
-	}
-	
-	// user profile
-	
-	
-	// shopping cart
-	
-	
-	// book details
-	
-	
-	// book rating and comments
-	
-	
-	// wish list
-	
-	
+		// Creates new GeekTextApp
+		GeekTextFrame geekText = new GeekTextFrame(ROOT_URL);
+	}	
 }
