@@ -3,6 +3,8 @@ package GeekTextApp;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.List;
 
 import javax.swing.*;
@@ -36,10 +38,14 @@ public class BookBrowsePane extends JPanel implements ActionListener
 	// constructor
 	public BookBrowsePane(String rootURL)
 	{
-		setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		// vars
 		this.rootURL = rootURL;
 		this.booksBrowser = new BookBrowser(this.rootURL);
 		this.booksTable = booksBrowser.BrowseBooksByPage();
+		this.booksListPane = new JScrollPane(booksTable);
+		
+		// stuff
+		setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		setLayout(gridBagLayout);
 		
@@ -66,15 +72,56 @@ public class BookBrowsePane extends JPanel implements ActionListener
 		gbc_topPanel.insets = new Insets(0, 0, 5, 5);
 		gbc_topPanel.gridx = 0;
 		gbc_topPanel.gridy = 0;
-		add(topPanel, gbc_topPanel);
+		
+		JPanel dataPanel = new JPanel();
+		
+		dataPanel.add(booksListPane);
+		GridBagConstraints gbc_dataPanel = new GridBagConstraints();
+		gbc_dataPanel.fill = GridBagConstraints.BOTH;
+		gbc_dataPanel.gridx = 0;
+		gbc_dataPanel.gridy = 1;
 		
 		JPanel bottomPanel = new JPanel();
-		
 		JLabel labelRowsPerPage = new JLabel("Rows:");
 		bottomPanel.add(labelRowsPerPage);
 		
 		String[] rowsPerPageList = {"20", "10"};
 		JComboBox cmbRowsPerPage = new JComboBox(rowsPerPageList);
+		
+		cmbRowsPerPage.addItemListener(new ItemListener()
+		{
+			@Override
+			public void itemStateChanged(ItemEvent e)
+			{
+				int item = cmbRowsPerPage.getSelectedIndex();
+				int curItem;
+				
+				if(booksBrowser.getRowsPerPage() == 20)
+				{
+					curItem = 0;
+				}
+				else
+				{
+					curItem = 1;
+				}
+				
+				if(item != curItem)
+				{
+					if(item == 0)
+					{
+						booksBrowser.setRowsPerPage(20);
+					}
+					else
+					{
+						booksBrowser.setRowsPerPage(10);
+					}
+					
+					// redraw table
+					booksTable = booksBrowser.BrowseBooksByPage();
+					booksListPane.revalidate();
+				}
+			}
+		});
 		bottomPanel.add(cmbRowsPerPage);
 		
 		JLabel labelPageNumber = new JLabel("Page:");
@@ -87,19 +134,14 @@ public class BookBrowsePane extends JPanel implements ActionListener
 		gbc_bottomPanel.insets = new Insets(0, 0, 5, 5);
 		gbc_bottomPanel.gridx = 0;
 		gbc_bottomPanel.gridy = 2;
-		add(bottomPanel, gbc_bottomPanel);
 		
-		JPanel dataPanel = new JPanel();
-		this.booksListPane = new JScrollPane(booksTable);
-		dataPanel.add(booksListPane);
-		GridBagConstraints gbc_dataPanel = new GridBagConstraints();
-		gbc_dataPanel.fill = GridBagConstraints.BOTH;
-		gbc_dataPanel.gridx = 0;
-		gbc_dataPanel.gridy = 1;
+		// add panels
+		add(topPanel, gbc_topPanel);
+		add(bottomPanel, gbc_bottomPanel);		
 		add(dataPanel, gbc_dataPanel);
 	};
 	
-	// button code
+	// button/box code
 	@Override
 	public void actionPerformed(ActionEvent event)
 	{

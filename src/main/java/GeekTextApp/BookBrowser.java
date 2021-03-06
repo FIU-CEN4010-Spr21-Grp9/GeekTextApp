@@ -81,12 +81,14 @@ public class BookBrowser
 		List<Book> curPageBooks = GetBooksForCurPage();
 		
 		returnTable = new JTable(new BookTable(curPageBooks));
-		resizeColumnWidth(returnTable);
+		//resizeColumnWidth(returnTable);
+		//returnTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
 		return returnTable;
 	}
 	
 	// RESIZER
+	/*
 	public void resizeColumnWidth(JTable table)
 	{
 	    final TableColumnModel columnModel = table.getColumnModel();
@@ -109,7 +111,10 @@ public class BookBrowser
 	        
 	        columnModel.getColumn(column).setPreferredWidth(width);
 	    }
+	    
+	    int totalWidth = columnModel.getTotalColumnWidth();
 	}
+	*/
 	
 	// return genre list to filter drop down
 	public String[] GetGenreList()
@@ -297,5 +302,24 @@ public class BookBrowser
 		
 		curPage = 1;
 		maxPage = GetMaxPageNum();
-	}	
+	}
+	
+	// get/set
+	public void setRowsPerPage(int rows)
+	{
+		this.rowsPerPage = rows;
+		maxPage = GetMaxPageNum();
+		
+		if(curPage > maxPage)
+		{
+			curPage = 1;
+		}
+		
+		//GetBooksForCurPage();
+	}
+	
+	public int getRowsPerPage()
+	{
+		return rowsPerPage;
+	}
 }
