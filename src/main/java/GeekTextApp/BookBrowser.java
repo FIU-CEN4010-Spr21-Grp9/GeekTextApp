@@ -36,9 +36,9 @@ import org.springframework.web.client.RestTemplate;
 public class BookBrowser
 {
 	// private variables
-	//private int genreID;
-	//private int authorID;
-	//private int rating;
+	private int genreID;
+	private int authorID;
+	private int rating;
 	private int curPage;
 	private int maxPage;
 	private int rowsPerPage;
@@ -57,8 +57,9 @@ public class BookBrowser
 		// internal values
 		this.rowsPerPage = 20;
 		this.curPage = 1;
-		//this.genreID = 0;
-		//this.rating = 0;
+		this.genreID = 0;
+		this.rating = 0;
+		this.authorID = 0;
 				
 		// root URL
 		this.rootURL = rootURL;
@@ -72,12 +73,12 @@ public class BookBrowser
 		// default to top sellers until another option is picked
 		if(books == null)
 		{
-			// ListBooksByTopSellers();
+			ListBooksByTopSellers();
 			
 			// Test other book browsing (before GUI code is fully implemented)
-			ListBooksByGenreId(1);
-			// ListBooksByAuthorId(179677); // Chris' code not merged yet
-			// ListBooksByRating(3);
+			// this.genreID = 1; ListBooksByGenreId();
+			// this.authorID = 179677; ListBooksByAuthorId(); // Chris' code not merged yet
+			// this.rating = 3; ListBooksByRating();
 		}
 		
 		booksTable = BrowseBooksByPage();
@@ -219,6 +220,10 @@ public class BookBrowser
 	// list top sellers
 	public void ListBooksByTopSellers()
 	{
+		this.genreID = 0;
+		this.authorID = 0;
+		this.rating = 0;
+		
 		fullURL = rootURL + "/books/query/viaproc/topsellers";
 		
 		ResponseEntity<List<Book>> responseEntity = restTemplate.exchange(
@@ -243,7 +248,7 @@ public class BookBrowser
 	}
 	
 	// list by author
-	public void ListBooksByAuthorId(Integer authorID)
+	public void ListBooksByAuthorId()
 	{
 		fullURL = rootURL + "/books/query/viaproc/byauthor?authorID={id}";
 		
@@ -270,7 +275,7 @@ public class BookBrowser
 	}
 	
 	// list by genre
-	public void ListBooksByGenreId(Integer genreID)
+	public void ListBooksByGenreId()
 	{
 		fullURL = rootURL + "/books/query/viaproc/bygenre?genreID={id}";
 		
@@ -298,7 +303,7 @@ public class BookBrowser
 	
 	
 	// list by rating
-	public void ListBooksByRating(Integer rating)
+	public void ListBooksByRating()
 	{
 		fullURL = rootURL + "/books/query/viaproc/byrating?rating={rating}";
 		
@@ -324,7 +329,8 @@ public class BookBrowser
 		booksTable = BrowseBooksByPage();
 	}
 	
-	// get/set
+	/// get/set ///
+	// rows per page
 	public void SetRowsPerPage(int rows)
 	{
 		this.rowsPerPage = rows;
@@ -343,6 +349,7 @@ public class BookBrowser
 		return rowsPerPage;
 	}
 	
+	// current page
 	public void SetCurrentPage(int pageNum)
 	{
 		if(curPage == pageNum)
@@ -368,5 +375,50 @@ public class BookBrowser
 	public int GetCurrentPage()
 	{
 		return curPage;
+	}
+	
+	// rating
+	public void SetRating(int ratingVal)
+	{
+		this.genreID = 0;
+		this.authorID = 0;
+		this.rating = ratingVal;
+		
+		ListBooksByRating();
+	}
+	
+	public int GetRating()
+	{
+		return this.rating;
+	}
+	
+	// genreID
+	public void SetGenreId(int genreID)
+	{
+		this.genreID = genreID;
+		this.authorID = 0;
+		this.rating = 0;
+		
+		ListBooksByGenreId();
+	}
+	
+	public int GetGenreId()
+	{
+		return this.genreID;
+	}
+	
+	// authorID
+	public void SetAuthorId(int authorID)
+	{
+		this.genreID = 0;
+		this.authorID = authorID;
+		this.rating = 0;
+		
+		ListBooksByAuthorId();
+	}
+	
+	public int GetAuthorId()
+	{
+		return this.authorID;
 	}
 }

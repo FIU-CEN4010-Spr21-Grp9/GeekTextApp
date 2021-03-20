@@ -47,9 +47,6 @@ public class GeekTextFrame extends JFrame implements ActionListener
 		// set layout items
 		setTitle("Geek Text");
 
-		// make it visible
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.pack();
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		getContentPane().setLayout(gridBagLayout);
 		
@@ -63,8 +60,8 @@ public class GeekTextFrame extends JFrame implements ActionListener
 		GeekTextPanel.setLayout(gbl_GeekTextPanel);
 		
 		TopNavPanel = new JPanel();
-		TopNavPanel.setMinimumSize(new Dimension(100, 24));
-		TopNavPanel.setMaximumSize(new Dimension(32767, 24));
+		//TopNavPanel.setMinimumSize(new Dimension(100, 24));
+		//TopNavPanel.setMaximumSize(new Dimension(32767, 24));
 		GridBagConstraints gbc_TopNavPanel = new GridBagConstraints();
 		gbc_TopNavPanel.insets = new Insets(0, 0, 5, 0);
 		gbc_TopNavPanel.fill = GridBagConstraints.BOTH;
@@ -88,15 +85,11 @@ public class GeekTextFrame extends JFrame implements ActionListener
 		gbc_BottomPanel.gridy = 1;
 		GeekTextPanel.add(BottomPanel, gbc_BottomPanel);
 		GridBagLayout gbl_BottomPanel = new GridBagLayout();
-		gbl_BottomPanel.columnWidths = new int[]{120, 105, 0};
-		gbl_BottomPanel.rowHeights = new int[]{111, 0};
-		gbl_BottomPanel.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
-		gbl_BottomPanel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		BottomPanel.setLayout(gbl_BottomPanel);
 		
 		LeftNavPanel = new JPanel();
-		LeftNavPanel.setMaximumSize(new Dimension(130, 32767));
-		LeftNavPanel.setMinimumSize(new Dimension(130, 100));
+		//LeftNavPanel.setMaximumSize(new Dimension(130, 32767));
+		//LeftNavPanel.setMinimumSize(new Dimension(130, 100));
 		GridBagConstraints gbc_LeftNavPanel = new GridBagConstraints();
 		gbc_LeftNavPanel.anchor = GridBagConstraints.NORTHWEST;
 		gbc_LeftNavPanel.insets = new Insets(0, 0, 0, 5);
@@ -165,9 +158,11 @@ public class GeekTextFrame extends JFrame implements ActionListener
 		gbc_booksBrowserPane.gridy = 0;
 		MainDataPanel.add(booksBrowserPane, gbc_booksBrowserPane);
 		
+		
+		// make it visible
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pack();
 		this.setVisible(true);
-		//this.setSize(width, height);
 	}
 	
 	// button code

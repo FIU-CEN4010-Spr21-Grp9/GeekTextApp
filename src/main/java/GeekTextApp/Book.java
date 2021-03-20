@@ -190,18 +190,7 @@ public class Book
 		BufferedImage bufImage;
 		ImageIcon returnIcon;
 		
-		try
-		{
-			URL coverImageURL = new URL(coverUrl);
-			bufImage = ImageIO.read(coverImageURL);
-			
-			// resize to 100 x 100
-			bufImage = resize(bufImage, 100, 100);
-		}
-		catch(Exception exp)
-		{
-			bufImage = new BufferedImage(100,100,BufferedImage.TYPE_BYTE_GRAY);
-		}
+		bufImage = resize(getCoverImage(), 100, 100);
 		
 		returnIcon = new ImageIcon(bufImage);
 		

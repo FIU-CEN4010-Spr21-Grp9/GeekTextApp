@@ -49,6 +49,7 @@ public class BookBrowsePane extends JPanel
 		public void actionPerformed(ActionEvent event)
 		{
 			booksBrowser.ListBooksByTopSellers();
+			refreshPanel();
 		}
 	}
 	
@@ -71,7 +72,13 @@ public class BookBrowsePane extends JPanel
 		@Override
 		public void itemStateChanged(ItemEvent event)
 		{
-			booksBrowser.ListBooksByGenreId(getSelectedIndex());
+			//Object eventSource = event.getSource();
+			
+			if (event.getItem().equals(cmbGenreList))
+			{
+				booksBrowser.SetGenreId(getSelectedIndex());
+				refreshPanel();
+			}
 		}
 	}
 	
@@ -94,7 +101,11 @@ public class BookBrowsePane extends JPanel
 		@Override
 		public void itemStateChanged(ItemEvent event)
 		{
-			booksBrowser.ListBooksByRating(getSelectedIndex());
+			if (event.getItem().equals(cmbRating))
+			{
+				booksBrowser.SetRating(getSelectedIndex());
+				refreshPanel();
+			}
 		}
 	}
 	
@@ -117,18 +128,22 @@ public class BookBrowsePane extends JPanel
 		@Override
 		public void itemStateChanged(ItemEvent event)
 		{
-			int rowsPerPage;
-			
-			if(getSelectedIndex() == 0)
+			if (event.getItem().equals(cmbRowsPerPage))
 			{
-				rowsPerPage = 20;
+				int rowsPerPage;
+				
+				if(getSelectedIndex() == 0)
+				{
+					rowsPerPage = 20;
+				}
+				else
+				{
+					rowsPerPage = 10;
+				}
+				
+				booksBrowser.SetRowsPerPage(rowsPerPage);
+				refreshPanel();
 			}
-			else
-			{
-				rowsPerPage = 10;
-			}
-			
-			booksBrowser.SetRowsPerPage(rowsPerPage);
 		}
 	}
 	
@@ -151,19 +166,23 @@ public class BookBrowsePane extends JPanel
 		@Override
 		public void itemStateChanged(ItemEvent event)
 		{
-			booksBrowser.SetCurrentPage(getSelectedIndex() + 1);
+			if (event.getItem().equals(cmbPage))
+			{
+				booksBrowser.SetCurrentPage(getSelectedIndex() + 1);
+				refreshPanel();
+			}
 		}
 	}
 	
 	// private values
-	private int genreID;
-	private int authorID;
-	private int rating;
-	private int rowsPerPage;
-	private int curPage;
 	private String rootURL;
 	private BookBrowser booksBrowser;
 	private JScrollPane booksListPane;
+	private TopSellerButton btnTopSellers;
+	private GenreListBox cmbGenreList;
+	private RatingListBox cmbRating;
+	private RowsPerPageBox cmbRowsPerPage;
+	private CurrentPageBox cmbPage;
 	
 	// constructor
 	public BookBrowsePane(String rootURL)
@@ -171,11 +190,6 @@ public class BookBrowsePane extends JPanel
 		// vars
 		this.rootURL = rootURL;
 		this.booksBrowser = new BookBrowser(this.rootURL);
-		this.curPage = booksBrowser.GetCurrentPage();
-		this.rowsPerPage = booksBrowser.GetRowsPerPage();
-		this.genreID = 0;
-		this.authorID = 0;
-		this.rating = 0;
 		
 		// panel stuff
 		setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -185,14 +199,14 @@ public class BookBrowsePane extends JPanel
 		// top panel
 		JPanel topPanel = new JPanel();
 		
-		TopSellerButton btnTopSellers = new TopSellerButton("Top Sellers");
+		btnTopSellers = new TopSellerButton("Top Sellers");
 		btnTopSellers.addActionListener(btnTopSellers);
 		topPanel.add(btnTopSellers);
 		
 		JLabel labelGenreBox = new JLabel("Genre:");
 		topPanel.add(labelGenreBox);
 		
-		GenreListBox cmbGenreList = new GenreListBox(booksBrowser.GetGenreList());
+		cmbGenreList = new GenreListBox(booksBrowser.GetGenreList());
 		cmbGenreList.addItemListener(cmbGenreList);
 		topPanel.add(cmbGenreList);
 		
@@ -200,7 +214,7 @@ public class BookBrowsePane extends JPanel
 		topPanel.add(labelRating);
 		
 		String[] ratings = {"Any", "1", "2", "3", "4", "5"};
-		RatingListBox cmbRating = new RatingListBox(ratings);
+		cmbRating = new RatingListBox(ratings);
 		cmbRating.addItemListener(cmbRating);
 		topPanel.add(cmbRating);
 		
@@ -215,10 +229,6 @@ public class BookBrowsePane extends JPanel
 		// data panel
 		JPanel dataPanel = new JPanel();
 		GridBagLayout gbl_dataPanel = new GridBagLayout();
-		gbl_dataPanel.columnWidths = new int[]{43, 2, 0};
-		gbl_dataPanel.rowHeights = new int[]{2, 0};
-		gbl_dataPanel.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
-		gbl_dataPanel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		dataPanel.setLayout(gbl_dataPanel);
 		GridBagConstraints gbc_dataPanel = new GridBagConstraints();
 		gbc_dataPanel.fill = GridBagConstraints.BOTH;
@@ -232,7 +242,7 @@ public class BookBrowsePane extends JPanel
 		bottomPanel.add(labelRowsPerPage);
 		
 		String[] rowsPerPageList = {"20", "10"};
-		RowsPerPageBox cmbRowsPerPage = new RowsPerPageBox(rowsPerPageList);
+		cmbRowsPerPage = new RowsPerPageBox(rowsPerPageList);
 		cmbRowsPerPage.addItemListener(cmbRowsPerPage);
 		
 		bottomPanel.add(cmbRowsPerPage);
@@ -240,7 +250,7 @@ public class BookBrowsePane extends JPanel
 		JLabel labelPageNumber = new JLabel("Page:");
 		bottomPanel.add(labelPageNumber);
 		
-		CurrentPageBox cmbPage = new CurrentPageBox(booksBrowser.GetPageList());
+		cmbPage = new CurrentPageBox(booksBrowser.GetPageList());
 		bottomPanel.add(cmbPage);
 		cmbPage.addActionListener(cmbGenreList);
 		
@@ -266,4 +276,21 @@ public class BookBrowsePane extends JPanel
 		dataPanel.add(booksListPane, gbc_booksListPane);
 	};
 
+	private void refreshPanel()
+	{
+		cmbGenreList.setSelectedIndex(booksBrowser.GetGenreId());
+		cmbRating.setSelectedIndex(booksBrowser.GetRating());
+		cmbPage.setSelectedIndex(booksBrowser.GetCurrentPage() - 1); // subtract one for zero-indexed offset
+		
+		if(booksBrowser.GetRowsPerPage() == 20)
+		{
+			cmbRowsPerPage.setSelectedIndex(0);
+		}
+		else
+		{
+			cmbRowsPerPage.setSelectedIndex(1);
+		}
+		
+		this.repaint();
+	}
 }
