@@ -1,9 +1,9 @@
 package GeekTextApp;
 
 import java.util.List;
-
+import javax.swing.ImageIcon;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableColumnModel;
+//import javax.swing.table.TableColumnModel;
 
 /**
 *  Title: BookTable
@@ -19,16 +19,21 @@ import javax.swing.table.TableColumnModel;
 
 public class BookTable extends AbstractTableModel
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4823692348222533307L;
 	// private variables
 	private List<Book> books;
 	private String[] columns;
+	private int[] columnWidths;
 	
 	// constructor
 	public BookTable(List<Book> books)
 	{
 		this.books = books;
-		columns = new String[]{"coverURL", "Title", "publishDate", "publisher", "price", "description"
-				, "isbn", "isbn13", "rating", "authorList", "genreList"};
+		columns = new String[]{"Cover", "Title", "Publish Date", "Publisher", "Price", "Description"
+				, "ISBN", "ISBN13", "Rating", "Author(s)", "Genre(s)"};
 	}
 	
 	// interface functions
@@ -48,7 +53,8 @@ public class BookTable extends AbstractTableModel
 		
 		switch(col)
 		{
-			case 0: return book.getCoverUrl();
+			//case 0: return book.getCoverUrl();
+			case 0: return book.getCoverThumb();
 			case 1: return book.getTitle();
 			case 2: return book.getPublishDate();
 			case 3: return book.getPublisher();
@@ -67,8 +73,24 @@ public class BookTable extends AbstractTableModel
 		}
 	}
 	
-	public String getColumnName(int columnIndex) {
+	public String getColumnName(int columnIndex)
+	{
 	    //System.out.println("in");
 	    return columns[columnIndex];
+	}
+	
+	public int getColumnWidth(int columnIndex)
+	{
+		return columnWidths[columnIndex];
+	}
+	
+	@Override
+	public Class<?> getColumnClass(int column)
+	{
+	    if (column == 0)
+	    {
+	        return ImageIcon.class;
+	    }
+	    return super.getColumnClass(column);
 	}
 }

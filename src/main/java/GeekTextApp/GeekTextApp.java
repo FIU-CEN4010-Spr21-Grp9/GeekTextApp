@@ -1,9 +1,5 @@
 package GeekTextApp;
 
-import java.util.List;
-import javax.swing.JFrame;
-import javax.swing.JTable;
-
 /**
 *  Title: GeekTextApp
 *  Semester: CEN4010 - Spring 2021
@@ -21,6 +17,7 @@ public class GeekTextApp
 {
 private static String ROOT_URL = "http://localhost:8080";
 	
+	@SuppressWarnings("unused")
 	public static void main(String[] args)
 	{
 		// Creates new GeekTextApp

@@ -1,20 +1,20 @@
 package GeekTextApp;
 
 import java.awt.Component;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
-import org.springframework.boot.SpringApplication;
+//import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.context.annotation.Bean;
+//import org.springframework.boot.web.client.RestTemplateBuilder;
+//import org.springframework.context.annotation.Bean;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
+//import org.springframework.http.HttpEntity;
+//import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -48,6 +48,9 @@ public class BookBrowser
 	private GenreList genreList;
 	private final RestTemplate restTemplate = new RestTemplate();
 	
+	// public variables
+	public JTable booksTable;
+	
 	// constructors
 	public BookBrowser(String rootURL)
 	{
@@ -61,15 +64,23 @@ public class BookBrowser
 		this.rootURL = rootURL;
 		
 		// get genres list for browsing
-		genreList = new GenreList(rootURL);
+		if(genreList == null)
+		{
+			genreList = new GenreList(rootURL);
+		}
 		
 		// default to top sellers until another option is picked
-		ListBooksByTopSellers();
+		if(books == null)
+		{
+			// ListBooksByTopSellers();
+			
+			// Test other book browsing (before GUI code is fully implemented)
+			ListBooksByGenreId(1);
+			// ListBooksByAuthorId(179677); // Chris' code not merged yet
+			// ListBooksByRating(3);
+		}
 		
-		// Test other book browsing (before GUI code is fully implemented)
-		// ListBooksByGenreId(1);
-		// ListBooksByAuthorId(179677); // Chris' code not merged yet
-		// ListBooksByRating(3);
+		booksTable = BrowseBooksByPage();
 	}
 	
 	// functions
@@ -81,21 +92,23 @@ public class BookBrowser
 		List<Book> curPageBooks = GetBooksForCurPage();
 		
 		returnTable = new JTable(new BookTable(curPageBooks));
-		//resizeColumnWidth(returnTable);
-		//returnTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		returnTable.setRowHeight(100);
+		resizeColumnWidth(returnTable);
+		returnTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		//returnTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		
 		return returnTable;
 	}
 	
 	// RESIZER
-	/*
 	public void resizeColumnWidth(JTable table)
 	{
 	    final TableColumnModel columnModel = table.getColumnModel();
+	    int[] columnWidths = new int[]{100, 300, 100, 100, 50, 200, 50, 60, 50, 100, 100};
 	    
 	    for (int column = 0; column < table.getColumnCount(); column++)
 	    {
-	        int width = 15; // Min width
+	        int width = columnWidths[column]; // Min width
 	        
 	        for (int row = 0; row < table.getRowCount(); row++)
 	        {
@@ -106,15 +119,14 @@ public class BookBrowser
 	        
 	        if(width > 300)
 	        {
-	            width=300;
+	            width = 300;
 	        }
 	        
 	        columnModel.getColumn(column).setPreferredWidth(width);
 	    }
 	    
-	    int totalWidth = columnModel.getTotalColumnWidth();
+	    //int totalWidth = columnModel.getTotalColumnWidth();
 	}
-	*/
 	
 	// return genre list to filter drop down
 	public String[] GetGenreList()
@@ -226,6 +238,8 @@ public class BookBrowser
 		
 		curPage = 1;
 		maxPage = GetMaxPageNum();
+		
+		booksTable = BrowseBooksByPage();
 	}
 	
 	// list by author
@@ -251,6 +265,8 @@ public class BookBrowser
 		
 		curPage = 1;
 		maxPage = GetMaxPageNum();
+		
+		booksTable = BrowseBooksByPage();
 	}
 	
 	// list by genre
@@ -276,6 +292,8 @@ public class BookBrowser
 		
 		curPage = 1;
 		maxPage = GetMaxPageNum();
+		
+		booksTable = BrowseBooksByPage();
 	}
 	
 	
@@ -302,10 +320,12 @@ public class BookBrowser
 		
 		curPage = 1;
 		maxPage = GetMaxPageNum();
+		
+		booksTable = BrowseBooksByPage();
 	}
 	
 	// get/set
-	public void setRowsPerPage(int rows)
+	public void SetRowsPerPage(int rows)
 	{
 		this.rowsPerPage = rows;
 		maxPage = GetMaxPageNum();
@@ -315,11 +335,38 @@ public class BookBrowser
 			curPage = 1;
 		}
 		
-		//GetBooksForCurPage();
+		booksTable = BrowseBooksByPage();
 	}
 	
-	public int getRowsPerPage()
+	public int GetRowsPerPage()
 	{
 		return rowsPerPage;
+	}
+	
+	public void SetCurrentPage(int pageNum)
+	{
+		if(curPage == pageNum)
+		{
+			// do nothing
+		}
+		else if(pageNum > maxPage)
+		{
+			curPage = maxPage;
+		}
+		else if(pageNum < 1)
+		{
+			curPage = 1;
+		}
+		else
+		{
+			curPage = pageNum;
+		}
+		
+		booksTable = BrowseBooksByPage();
+	}
+	
+	public int GetCurrentPage()
+	{
+		return curPage;
 	}
 }

@@ -3,7 +3,7 @@ package GeekTextApp;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
+//import java.util.List;
 
 import javax.swing.*;
 
@@ -20,13 +20,13 @@ import javax.swing.*;
 */
 public class GeekTextFrame extends JFrame implements ActionListener
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7438737158179176083L;
 	// private variables
 	private String rootURL;
-	private JPanel topNav;
-	private JPanel bottomPane;
-	private JPanel bottomNav;
-	
-	private GridBagConstraints layoutConst = null;
+	//private GridBagConstraints layoutConst = null;
 	private JPanel GeekTextPanel;
 	private JPanel TopNavPanel;
 	private JPanel BottomPanel;
@@ -50,26 +50,36 @@ public class GeekTextFrame extends JFrame implements ActionListener
 		// make it visible
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pack();
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		getContentPane().setLayout(gridBagLayout);
 		
 		GeekTextPanel = new JPanel();
-		getContentPane().add(GeekTextPanel, BorderLayout.NORTH);
+		GridBagConstraints gbc_GeekTextPanel = new GridBagConstraints();
+		gbc_GeekTextPanel.anchor = GridBagConstraints.NORTHWEST;
+		gbc_GeekTextPanel.gridx = 0;
+		gbc_GeekTextPanel.gridy = 0;
+		getContentPane().add(GeekTextPanel, gbc_GeekTextPanel);
 		GridBagLayout gbl_GeekTextPanel = new GridBagLayout();
-		gbl_GeekTextPanel.columnWidths = new int[]{0, 0};
-		gbl_GeekTextPanel.rowHeights = new int[]{0, 0, 0};
-		gbl_GeekTextPanel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gbl_GeekTextPanel.rowWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
 		GeekTextPanel.setLayout(gbl_GeekTextPanel);
 		
 		TopNavPanel = new JPanel();
+		TopNavPanel.setMinimumSize(new Dimension(100, 24));
+		TopNavPanel.setMaximumSize(new Dimension(32767, 24));
 		GridBagConstraints gbc_TopNavPanel = new GridBagConstraints();
 		gbc_TopNavPanel.insets = new Insets(0, 0, 5, 0);
 		gbc_TopNavPanel.fill = GridBagConstraints.BOTH;
 		gbc_TopNavPanel.gridx = 0;
 		gbc_TopNavPanel.gridy = 0;
 		GeekTextPanel.add(TopNavPanel, gbc_TopNavPanel);
+		GridBagLayout gbl_TopNavPanel = new GridBagLayout();
+		TopNavPanel.setLayout(gbl_TopNavPanel);
 		
 		labelGeekTextApp = new JLabel("Geek Text Application");
-		TopNavPanel.add(labelGeekTextApp);
+		GridBagConstraints gbc_labelGeekTextApp = new GridBagConstraints();
+		gbc_labelGeekTextApp.anchor = GridBagConstraints.NORTHWEST;
+		gbc_labelGeekTextApp.gridx = 1;
+		gbc_labelGeekTextApp.gridy = 0;
+		TopNavPanel.add(labelGeekTextApp, gbc_labelGeekTextApp);
 		
 		BottomPanel = new JPanel();
 		GridBagConstraints gbc_BottomPanel = new GridBagConstraints();
@@ -85,6 +95,8 @@ public class GeekTextFrame extends JFrame implements ActionListener
 		BottomPanel.setLayout(gbl_BottomPanel);
 		
 		LeftNavPanel = new JPanel();
+		LeftNavPanel.setMaximumSize(new Dimension(130, 32767));
+		LeftNavPanel.setMinimumSize(new Dimension(130, 100));
 		GridBagConstraints gbc_LeftNavPanel = new GridBagConstraints();
 		gbc_LeftNavPanel.anchor = GridBagConstraints.NORTHWEST;
 		gbc_LeftNavPanel.insets = new Insets(0, 0, 0, 5);
@@ -92,52 +104,67 @@ public class GeekTextFrame extends JFrame implements ActionListener
 		gbc_LeftNavPanel.gridy = 0;
 		BottomPanel.add(LeftNavPanel, gbc_LeftNavPanel);
 		GridBagLayout gbl_LeftNavPanel = new GridBagLayout();
-		gbl_LeftNavPanel.columnWidths = new int[]{99, 0};
-		gbl_LeftNavPanel.rowHeights = new int[]{23, 0, 0, 0, 0};
-		gbl_LeftNavPanel.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-		gbl_LeftNavPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		LeftNavPanel.setLayout(gbl_LeftNavPanel);
 		
 		btnBrowseBooks = new JButton("Browse Books");
 		btnBrowseBooks.setPreferredSize(new Dimension(120, 24));
+		btnBrowseBooks.setMinimumSize(new Dimension(120, 24));
+		btnBrowseBooks.setMaximumSize(new Dimension(120, 24));
 		GridBagConstraints gbc_btnBrowseBooks = new GridBagConstraints();
-		gbc_btnBrowseBooks.insets = new Insets(0, 0, 5, 0);
-		gbc_btnBrowseBooks.anchor = GridBagConstraints.NORTHWEST;
+		gbc_btnBrowseBooks.insets = new Insets(0, 5, 5, 0);
 		gbc_btnBrowseBooks.gridx = 0;
 		gbc_btnBrowseBooks.gridy = 0;
 		LeftNavPanel.add(btnBrowseBooks, gbc_btnBrowseBooks);
 		
 		btnUserProfile = new JButton("User Profile");
 		btnUserProfile.setPreferredSize(new Dimension(120, 24));
+		btnUserProfile.setMinimumSize(new Dimension(120, 24));
+		btnUserProfile.setMaximumSize(new Dimension(120, 24));
 		GridBagConstraints gbc_btnUserProfile = new GridBagConstraints();
-		gbc_btnUserProfile.insets = new Insets(0, 0, 5, 0);
+		gbc_btnUserProfile.insets = new Insets(0, 5, 5, 0);
 		gbc_btnUserProfile.gridx = 0;
 		gbc_btnUserProfile.gridy = 1;
 		LeftNavPanel.add(btnUserProfile, gbc_btnUserProfile);
 		
 		btnShopCart = new JButton("Shopping Cart");
 		btnShopCart.setPreferredSize(new Dimension(120, 24));
-		btnShopCart.setHorizontalAlignment(SwingConstants.LEFT);
+		btnShopCart.setMinimumSize(new Dimension(120, 24));
+		btnShopCart.setMaximumSize(new Dimension(120, 24));
 		GridBagConstraints gbc_btnShopCart = new GridBagConstraints();
-		gbc_btnShopCart.insets = new Insets(0, 0, 5, 0);
+		gbc_btnShopCart.insets = new Insets(0, 5, 5, 0);
 		gbc_btnShopCart.gridx = 0;
 		gbc_btnShopCart.gridy = 2;
 		LeftNavPanel.add(btnShopCart, gbc_btnShopCart);
 		
 		btnWishList = new JButton("Wish List");
 		btnWishList.setPreferredSize(new Dimension(120, 24));
+		btnWishList.setMinimumSize(new Dimension(120, 24));
+		btnWishList.setMaximumSize(new Dimension(120, 24));
 		GridBagConstraints gbc_btnWishList = new GridBagConstraints();
+		gbc_btnWishList.insets = new Insets(0, 5, 5, 0);
 		gbc_btnWishList.gridx = 0;
 		gbc_btnWishList.gridy = 3;
 		LeftNavPanel.add(btnWishList, gbc_btnWishList);
 		
-		MainDataPanel = new BookBrowsePane(rootURL);
-		MainDataPanel.setSize(800, 600);
+		// main data panel
+		MainDataPanel = new JPanel();
+		//MainDataPanel.setPreferredSize(new Dimension(800, 600));
 		GridBagConstraints gbc_MainDataPanel = new GridBagConstraints();
 		gbc_MainDataPanel.anchor = GridBagConstraints.WEST;
 		gbc_MainDataPanel.gridx = 1;
 		gbc_MainDataPanel.gridy = 0;
+		GridBagLayout gbl_MainDataPanel = new GridBagLayout();
+		MainDataPanel.setLayout(gbl_MainDataPanel);
+		
 		BottomPanel.add(MainDataPanel, gbc_MainDataPanel);
+		
+		JPanel booksBrowserPane = new BookBrowsePane(this.rootURL);
+		GridBagConstraints gbc_booksBrowserPane = new GridBagConstraints();
+		gbc_booksBrowserPane.anchor = GridBagConstraints.NORTHWEST;
+		gbc_booksBrowserPane.gridx = 0;
+		gbc_booksBrowserPane.gridy = 0;
+		MainDataPanel.add(booksBrowserPane, gbc_booksBrowserPane);
+		
 		this.pack();
 		this.setVisible(true);
 		//this.setSize(width, height);

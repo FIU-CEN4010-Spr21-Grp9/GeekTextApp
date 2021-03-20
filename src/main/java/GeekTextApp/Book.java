@@ -1,5 +1,14 @@
 package GeekTextApp;
 
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+//import java.io.IOException;
+import java.net.URL;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
@@ -159,6 +168,46 @@ public class Book
 		return coverUrl;
 	}
 	
+	public BufferedImage getCoverImage()
+	{
+		BufferedImage bufImage;
+		
+		try
+		{
+			URL coverImageURL = new URL(coverUrl);
+			bufImage = ImageIO.read(coverImageURL);
+		}
+		catch(Exception exp)
+		{
+			bufImage = new BufferedImage(200,200,BufferedImage.TYPE_BYTE_GRAY);
+		}
+		
+		return bufImage;
+	}
+	
+	public ImageIcon getCoverThumb()
+	{
+		BufferedImage bufImage;
+		ImageIcon returnIcon;
+		
+		try
+		{
+			URL coverImageURL = new URL(coverUrl);
+			bufImage = ImageIO.read(coverImageURL);
+			
+			// resize to 100 x 100
+			bufImage = resize(bufImage, 100, 100);
+		}
+		catch(Exception exp)
+		{
+			bufImage = new BufferedImage(100,100,BufferedImage.TYPE_BYTE_GRAY);
+		}
+		
+		returnIcon = new ImageIcon(bufImage);
+		
+		return returnIcon;
+	}
+	
 	public void setCoverUrl(String coverUrl)
 	{
 		this.coverUrl = coverUrl;
@@ -189,7 +238,7 @@ public class Book
 	// author array //
 	// need to clear array and assign values for SET
 	
-	// return pointer to an array for get or a concatentated string?
+	// return pointer to an array for get or a concatenated string?
 	
 	
 	// genre list //
@@ -206,6 +255,19 @@ public class Book
 	// genre array //
 	// need to clear array and assign values for SET
 	
-	// return pointer to an array for get or a concatentated string?
+	// return pointer to an array for get or a concatenated string?
+	
+	// image resizer
+	public static BufferedImage resize(BufferedImage img, int newW, int newH)
+	{ 
+	    Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
+	    BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
+
+	    Graphics2D g2d = dimg.createGraphics();
+	    g2d.drawImage(tmp, 0, 0, null);
+	    g2d.dispose();
+
+	    return dimg;
+	}  
 	
 }

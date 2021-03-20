@@ -1,17 +1,17 @@
 package GeekTextApp;
 
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JTable;
+//import javax.swing.JTable;
 
-import org.springframework.boot.SpringApplication;
+//import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.context.annotation.Bean;
+//import org.springframework.boot.web.client.RestTemplateBuilder;
+//import org.springframework.context.annotation.Bean;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
+//import org.springframework.http.HttpEntity;
+//import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
