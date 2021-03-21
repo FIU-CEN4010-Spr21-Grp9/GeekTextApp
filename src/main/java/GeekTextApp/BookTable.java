@@ -26,7 +26,7 @@ public class BookTable extends AbstractTableModel
 	// private variables
 	private List<Book> books;
 	private String[] columns;
-	private int[] columnWidths;
+	private int size;
 	
 	// constructor
 	public BookTable(List<Book> books)
@@ -34,9 +34,16 @@ public class BookTable extends AbstractTableModel
 		this.books = books;
 		columns = new String[]{"Cover", "Title", "Publish Date", "Publisher", "Price", "Description"
 				, "ISBN", "ISBN13", "Rating", "Author(s)", "Genre(s)"};
+		
+		this.size = books.size();
 	}
 	
 	// interface functions
+	public void clear()
+	{
+		books.clear();
+	}
+	
 	public int getColumnCount()
 	{
 		return columns.length;
@@ -44,7 +51,7 @@ public class BookTable extends AbstractTableModel
 	
 	public int getRowCount()
 	{
-		return books.size();
+		return size;
 	}
 	
 	public Object getValueAt(int row, int col)
@@ -78,12 +85,7 @@ public class BookTable extends AbstractTableModel
 	    //System.out.println("in");
 	    return columns[columnIndex];
 	}
-	
-	public int getColumnWidth(int columnIndex)
-	{
-		return columnWidths[columnIndex];
-	}
-	
+
 	@Override
 	public Class<?> getColumnClass(int column)
 	{

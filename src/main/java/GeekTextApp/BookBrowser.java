@@ -1,7 +1,7 @@
 package GeekTextApp;
 
 import java.awt.Component;
-//import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JTable;
@@ -45,11 +45,12 @@ public class BookBrowser
 	private String rootURL;
 	private String fullURL;
 	private List<Book> books;
+	private BookTable booksTable;
 	private GenreList genreList;
 	private final RestTemplate restTemplate = new RestTemplate();
 	
 	// public variables
-	public JTable booksTable;
+	//public JTable booksTable;
 	
 	// constructors
 	public BookBrowser(String rootURL)
@@ -73,32 +74,83 @@ public class BookBrowser
 		// default to top sellers until another option is picked
 		if(books == null)
 		{
-			ListBooksByTopSellers();
+			// ListBooksByTopSellers();
 			
 			// Test other book browsing (before GUI code is fully implemented)
-			// this.genreID = 1; ListBooksByGenreId();
+			this.genreID = 1; ListBooksByGenreId();
 			// this.authorID = 179677; ListBooksByAuthorId(); // Chris' code not merged yet
 			// this.rating = 3; ListBooksByRating();
 		}
-		
-		booksTable = BrowseBooksByPage();
 	}
 	
 	// functions
 	// main browsing return
-	public JTable BrowseBooksByPage()
+	public JTable GetBooksTable()
 	{
-		JTable returnTable;
+		JTable returnTable = new JTable(booksTable);
 		
-		List<Book> curPageBooks = GetBooksForCurPage();
-		
-		returnTable = new JTable(new BookTable(curPageBooks));
 		returnTable.setRowHeight(100);
 		resizeColumnWidth(returnTable);
 		returnTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		//returnTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		
 		return returnTable;
+	}
+	
+	private void BrowseBooksByPage()
+	{
+		List<Book> curPageBooks = GetBooksForCurPage();
+
+		booksTable = null;
+		
+		booksTable = new BookTable(curPageBooks);
+	}
+	
+	// get page #
+	private List<Book> GetBooksForCurPage()
+	{
+		int x, y;
+		List<Book> subListBooks = new ArrayList<Book>();
+		
+		if(curPage == 1)
+		{
+			x = 1;
+			
+			if(curPage == maxPage)
+			{
+				y = books.size();
+			}
+			else
+			{
+				y = rowsPerPage;
+			}
+		}
+		else if (curPage == maxPage)
+		{
+			x = ((curPage - 1) * rowsPerPage) + 1;
+			y = books.size();
+		}
+		else
+		{
+			x = ((curPage - 1) * rowsPerPage) + 1;
+			y = (curPage) * rowsPerPage;
+		}
+		
+		// offset "rows numbers" to zero-based list values
+		x--;
+		//y--;
+		
+		//subListBooks = books.subList(x, y);
+		for(int i = 0; i < rowsPerPage; i++)
+		{
+			if(x < y)
+			{
+				subListBooks.add(books.get(x));
+				
+				x++;
+			}
+		}
+		
+		return subListBooks;
 	}
 	
 	// RESIZER
@@ -126,7 +178,7 @@ public class BookBrowser
 	        columnModel.getColumn(column).setPreferredWidth(width);
 	    }
 	    
-	    //int totalWidth = columnModel.getTotalColumnWidth();
+	    //return columnModel.getTotalColumnWidth();
 	}
 	
 	// return genre list to filter drop down
@@ -172,42 +224,6 @@ public class BookBrowser
 		}
 	}
 	
-	// get page #
-	public List<Book> GetBooksForCurPage()
-	{
-		int x, y;
-		
-		if(curPage == 1)
-		{
-			x = 1;
-			
-			if(curPage == maxPage)
-			{
-				y = books.size();
-			}
-			else
-			{
-				y = rowsPerPage;
-			}
-		}
-		else if (curPage == maxPage)
-		{
-			x = (curPage * rowsPerPage) + 1;
-			y = books.size();
-		}
-		else
-		{
-			x = (curPage * rowsPerPage) + 1;
-			y = (curPage +1) * rowsPerPage;
-		}
-		
-		// offset "rows numbers" to zero-based list values
-		x--;
-		//y--;
-		
-		return books.subList(x, y);
-	}
-	
 	// sort by author
 	
 	
@@ -244,7 +260,7 @@ public class BookBrowser
 		curPage = 1;
 		maxPage = GetMaxPageNum();
 		
-		booksTable = BrowseBooksByPage();
+		BrowseBooksByPage();
 	}
 	
 	// list by author
@@ -271,7 +287,7 @@ public class BookBrowser
 		curPage = 1;
 		maxPage = GetMaxPageNum();
 		
-		booksTable = BrowseBooksByPage();
+		BrowseBooksByPage();
 	}
 	
 	// list by genre
@@ -298,7 +314,7 @@ public class BookBrowser
 		curPage = 1;
 		maxPage = GetMaxPageNum();
 		
-		booksTable = BrowseBooksByPage();
+		BrowseBooksByPage();
 	}
 	
 	
@@ -326,7 +342,7 @@ public class BookBrowser
 		curPage = 1;
 		maxPage = GetMaxPageNum();
 		
-		booksTable = BrowseBooksByPage();
+		BrowseBooksByPage();
 	}
 	
 	/// get/set ///
@@ -341,10 +357,10 @@ public class BookBrowser
 			curPage = 1;
 		}
 		
-		booksTable = BrowseBooksByPage();
+		BrowseBooksByPage();
 	}
 	
-	public int GetRowsPerPage()
+	public Integer GetRowsPerPage()
 	{
 		return rowsPerPage;
 	}
@@ -369,10 +385,10 @@ public class BookBrowser
 			curPage = pageNum;
 		}
 		
-		booksTable = BrowseBooksByPage();
+		BrowseBooksByPage();
 	}
 	
-	public int GetCurrentPage()
+	public Integer GetCurrentPage()
 	{
 		return curPage;
 	}
