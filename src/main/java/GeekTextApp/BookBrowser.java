@@ -2,6 +2,7 @@ package GeekTextApp;
 
 import java.awt.Component;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JTable;
@@ -42,15 +43,18 @@ public class BookBrowser
 	private int curPage;
 	private int maxPage;
 	private int rowsPerPage;
+	private int sortIndex;
 	private String rootURL;
 	private String fullURL;
 	private List<Book> books;
 	private BookTable booksTable;
 	private GenreList genreList;
 	private final RestTemplate restTemplate = new RestTemplate();
+	private String[] sortOptions = {"", "Title", "Title (desc)", "Author", "Author (desc)", "Price", "Price (desc)"
+			, "Rating", "Rating (desc)", "Date", "Date (desc)"}; // declare here so indexes are always the same
 	
 	// public variables
-	//public JTable booksTable;
+	// public JTable booksTable;
 	
 	// constructors
 	public BookBrowser(String rootURL)
@@ -61,6 +65,7 @@ public class BookBrowser
 		this.genreID = 0;
 		this.rating = 0;
 		this.authorID = 0;
+		this.sortIndex = 0;
 				
 		// root URL
 		this.rootURL = rootURL;
@@ -187,6 +192,18 @@ public class BookBrowser
 		return genreList.FillGenreComboBox();
 	}
 	
+	// return sort options array
+	public String[] GetSortOptions()
+	{
+		return sortOptions;
+	}
+	
+	// return sort index
+	public int GetSortIndex()
+	{
+		return sortIndex;
+	}
+	
 	// return page list to filter drop down
 	public String[] GetPageList()
 	{
@@ -224,14 +241,107 @@ public class BookBrowser
 		}
 	}
 	
-	// sort by author
+	/// SORTING ///
+	// main sorting method
+	public void SetSorting(int optIndex)
+	{
+		/*
+		* Sort Index Hint
+		* 0 - None
+		* 1, 2 - Title
+		* 3, 4 - Author
+		* 5, 6 - Price
+		* 7, 8 - Rating
+		* 9, 10 - Date
+		* 
+		* Evens are DESC sort (0 is not even)
+		*/
+		
+		// HANDLE OUT OF RANGE
+		if(optIndex < 0)
+		{
+			optIndex = 0;
+		}
+		else if(optIndex > 10)
+		{
+			optIndex = 0;
+		}
+		
+		sortIndex = optIndex;
+		
+		// DO SORTING
+		if(sortIndex > 0)
+		{
+			switch(sortIndex)
+			{
+				// TITLE
+				case 1:
+				case 2:
+					SortByTitle();
+					break;
+				// AUTHOR
+				case 3:
+				case 4:
+					SortByAuthor();
+					break;
+				// PRICE
+				case 5:
+				case 6:
+					SortByPrice();
+					break;
+				// RATING
+				case 7:
+				case 8:
+					SortByRating();
+					break;
+				// DATE
+				case 9:
+				case 10:
+					SortByDate();
+					break;
+				default:
+					break;
+			}
+			
+			// reverse order for DESC
+			if((sortIndex % 2) == 0 )
+			{
+				Collections.reverse(books);
+			}
+		}
+		
+		BrowseBooksByPage();
+	}
 	
+	// sort by author
+	private void SortByAuthor()
+	{
+		Collections.sort(books, Book.AuthorComparator);
+	}
 	
 	// sort by title
+	private void SortByTitle()
+	{
+		Collections.sort(books, Book.TitleComparator);
+	}
 	
+	// sort by rating
+	private void SortByRating()
+	{
+		Collections.sort(books, Book.RatingComparator);
+	}
 	
-	// sort by ...
+	// sort by price
+	private void SortByPrice()
+	{
+		Collections.sort(books, Book.PriceComparator);
+	}
 	
+	// sort by publish date
+	private void SortByDate()
+	{
+		Collections.sort(books, Book.DateComparator);
+	}
 	
 	// list top sellers
 	public void ListBooksByTopSellers()
@@ -239,6 +349,7 @@ public class BookBrowser
 		this.genreID = 0;
 		this.authorID = 0;
 		this.rating = 0;
+		this.sortIndex = 0;
 		
 		fullURL = rootURL + "/books/query/viaproc/topsellers";
 		
@@ -399,6 +510,7 @@ public class BookBrowser
 		this.genreID = 0;
 		this.authorID = 0;
 		this.rating = ratingVal;
+		this.sortIndex = 0;
 		
 		ListBooksByRating();
 	}
@@ -414,6 +526,7 @@ public class BookBrowser
 		this.genreID = genreID;
 		this.authorID = 0;
 		this.rating = 0;
+		this.sortIndex = 0;
 		
 		ListBooksByGenreId();
 	}
@@ -429,6 +542,7 @@ public class BookBrowser
 		this.genreID = 0;
 		this.authorID = authorID;
 		this.rating = 0;
+		this.sortIndex = 0;
 		
 		ListBooksByAuthorId();
 	}

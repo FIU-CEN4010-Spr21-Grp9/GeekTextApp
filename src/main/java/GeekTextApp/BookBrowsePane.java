@@ -83,6 +83,23 @@ public class BookBrowsePane extends JPanel implements ActionListener, ItemListen
 		};
 	}
 	
+	private class SortListBox extends JComboBox<String>
+	{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -1982412855752696534L;
+		private String[] sortOptions = booksBrowser.GetSortOptions();
+		
+		public SortListBox()
+		{
+			for(int i = 0; i < sortOptions.length; i++)
+			{
+				addItem(sortOptions[i]);
+			}
+		};
+	}
+	
 	private class RowsPerPageBox extends JComboBox<String>
 	{
 		/**
@@ -128,6 +145,7 @@ public class BookBrowsePane extends JPanel implements ActionListener, ItemListen
 	private TopSellerButton btnTopSellers;
 	private GenreListBox cmbGenreList;
 	private RatingListBox cmbRating;
+	private SortListBox cmbSorting;
 	private RowsPerPageBox cmbRowsPerPage;
 	private CurrentPageBox cmbPage;
 	private JTable booksTable;
@@ -138,6 +156,7 @@ public class BookBrowsePane extends JPanel implements ActionListener, ItemListen
 	private JLabel labelPageNumber;
 	private JLabel labelGenreBox;
 	private JLabel labelRating;
+	private JLabel labelSorting;
 	private GridBagLayout gridBagLayout;
 	private GridBagConstraints gbc_topPanel;
 	private GridBagConstraints gbc_dataPanel;
@@ -194,6 +213,13 @@ public class BookBrowsePane extends JPanel implements ActionListener, ItemListen
 		cmbRating = new RatingListBox();
 		cmbRating.setSelectedIndex(booksBrowser.GetRating());
 		topPanel.add(cmbRating);
+		
+		labelSorting = new JLabel("Sorting:");
+		topPanel.add(labelSorting);
+		
+		cmbSorting = new SortListBox();
+		//cmbRating.setSelectedIndex(booksBrowser.GetRating());
+		topPanel.add(cmbSorting);
 		
 		gbc_topPanel = new GridBagConstraints();
 		gbc_topPanel.fill = GridBagConstraints.BOTH;
@@ -286,6 +312,12 @@ public class BookBrowsePane extends JPanel implements ActionListener, ItemListen
 				
 				booksBrowser.SetRating(soureBox.getSelectedIndex());
 			}
+			else if (eventSource instanceof SortListBox)
+			{
+				SortListBox soureBox = (SortListBox) eventSource;
+				
+				booksBrowser.SetSorting(soureBox.getSelectedIndex());
+			}
 			else if (eventSource instanceof RowsPerPageBox)
 			{
 				RowsPerPageBox soureBox = (RowsPerPageBox) eventSource;
@@ -313,6 +345,7 @@ public class BookBrowsePane extends JPanel implements ActionListener, ItemListen
 		
 		cmbGenreList.setSelectedIndex(booksBrowser.GetGenreId());
 		cmbRating.setSelectedIndex(booksBrowser.GetRating());
+		cmbSorting.setSelectedIndex(booksBrowser.GetSortIndex());
 		cmbRowsPerPage.setSelectedItem(booksBrowser.GetRowsPerPage().toString());
 		
 		cmbPage.removeAllItems();
@@ -332,6 +365,7 @@ public class BookBrowsePane extends JPanel implements ActionListener, ItemListen
 	{
 		cmbGenreList.removeItemListener(this);
 		cmbRating.removeItemListener(this);
+		cmbSorting.removeItemListener(this);
 		cmbPage.removeItemListener(this);
 		cmbRowsPerPage.removeItemListener(this);
 	}
@@ -340,6 +374,7 @@ public class BookBrowsePane extends JPanel implements ActionListener, ItemListen
 	{
 		cmbGenreList.addItemListener(this);
 		cmbRating.addItemListener(this);
+		cmbSorting.addItemListener(this);
 		cmbPage.addItemListener(this);
 		cmbRowsPerPage.addItemListener(this);
 	}

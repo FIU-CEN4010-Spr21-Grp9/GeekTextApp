@@ -3,7 +3,7 @@ package GeekTextApp;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-//import java.io.IOException;
+import java.util.Comparator;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
@@ -257,6 +257,65 @@ public class Book
 	    g2d.dispose();
 
 	    return dimg;
-	}  
+	}
 	
+	// Comparator for Title
+	public static Comparator<Book> TitleComparator = new Comparator<Book>()
+	{
+		public int compare(Book b1, Book b2)
+		{
+			String Title1 = b1.getTitle().toUpperCase();
+			String Title2 = b2.getTitle().toUpperCase();
+			
+			return Title1.compareTo(Title2);
+		}
+	};
+	
+	// Comparator for Author
+	public static Comparator<Book> AuthorComparator = new Comparator<Book>()
+	{
+		public int compare(Book b1, Book b2)
+		{
+			String Author1 = b1.getAuthorList().toUpperCase();
+			String Author2 = b2.getAuthorList().toUpperCase();
+			
+			return Author1.compareTo(Author2);
+		}
+	};
+	
+	// Comparator for Price
+	public static Comparator<Book> PriceComparator = new Comparator<Book>()
+	{
+		public int compare(Book b1, Book b2)
+		{
+			Float Price1 = b1.getPrice();
+			Float Price2 = b2.getPrice();
+			
+			return Price1.compareTo(Price2);
+		}
+	};
+	
+	// Comparator for Rating
+	public static Comparator<Book> RatingComparator = new Comparator<Book>()
+	{
+		public int compare(Book b1, Book b2)
+		{
+			Float Rating1 = b1.getRating();
+			Float Rating2 = b2.getRating();
+			
+			return Rating1.compareTo(Rating2);
+		}
+	};
+	
+	// Comparator for Publish Date
+	public static Comparator<Book> DateComparator = new Comparator<Book>()
+	{
+		public int compare(Book b1, Book b2)
+		{
+			String Date1 = b1.getPublishDate();
+			String Date2 = b2.getPublishDate();
+			
+			return Date1.compareTo(Date2);
+		}
+	};
 }
