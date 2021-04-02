@@ -39,9 +39,9 @@ public class GenreList
 	private final RestTemplate restTemplate = new RestTemplate();
 	
 	// constructor
-	public GenreList(String rootURL)
+	public GenreList()
 	{
-		this.rootURL = rootURL;
+		this.rootURL = GeekTextApp.ROOT_URL;
 		ListGenres();
 	}
 	

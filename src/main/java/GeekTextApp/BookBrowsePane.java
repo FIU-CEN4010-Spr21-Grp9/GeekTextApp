@@ -5,13 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-//import java.util.List;
-
 import javax.swing.*;
-//import net.miginfocom.swing.MigLayout;
-//import javax.swing.GroupLayout.Alignment;
-//import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.BevelBorder;
+import javax.swing.table.TableColumnModel;
 
 /**
 *  Title: GeekTextApp
@@ -21,7 +17,7 @@ import javax.swing.border.BevelBorder;
 * I affirm that this program is entirely my own work and none of it is the work
 * of any other person. 
 * 
-* This class provides the frame point class for the GeekText GUI 
+* This class provides the nested book browsing frame class for the GeekText GUI 
 * 
 */
 public class BookBrowsePane extends JPanel implements ActionListener, ItemListener
@@ -139,7 +135,6 @@ public class BookBrowsePane extends JPanel implements ActionListener, ItemListen
 	}
 	
 	// private values
-	private String rootURL;
 	private BookBrowser booksBrowser;
 	private JScrollPane booksListPane;
 	private TopSellerButton btnTopSellers;
@@ -161,13 +156,13 @@ public class BookBrowsePane extends JPanel implements ActionListener, ItemListen
 	private GridBagConstraints gbc_topPanel;
 	private GridBagConstraints gbc_dataPanel;
 	private GridBagConstraints gbc_bottomPanel;
+	private BookDetailPane bookDetails;
 	
 	// constructor
-	public BookBrowsePane(String rootURL)
+	public BookBrowsePane()
 	{
 		// local variables
-		this.rootURL = rootURL;
-		this.booksBrowser = new BookBrowser(this.rootURL);
+		this.booksBrowser = new BookBrowser();
 		
 		// this panel stuff
 		setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -218,7 +213,6 @@ public class BookBrowsePane extends JPanel implements ActionListener, ItemListen
 		topPanel.add(labelSorting);
 		
 		cmbSorting = new SortListBox();
-		//cmbRating.setSelectedIndex(booksBrowser.GetRating());
 		topPanel.add(cmbSorting);
 		
 		gbc_topPanel = new GridBagConstraints();
@@ -245,6 +239,32 @@ public class BookBrowsePane extends JPanel implements ActionListener, ItemListen
 		gbc_dataPanel.gridy = 1;
 		
 		booksTable = booksBrowser.GetBooksTable();
+		TableColumnModel tcm =  booksTable.getColumnModel();
+		tcm.removeColumn(tcm.getColumn(11));
+		
+		booksTable.addMouseListener(
+				new java.awt.event.MouseAdapter()
+				{
+					public void mouseClicked(java.awt.event.MouseEvent evt)
+					{
+						int row = booksTable.rowAtPoint(evt.getPoint());
+						int bookID = (int) booksTable.getModel().getValueAt(row, 11);
+
+						bookDetails = new BookDetailPane(bookID);
+						
+						// this return value defaults to 0
+						// if the user clicks on the author name on the details
+						// then the details page will close and return the authorID
+						int retAuthorID = bookDetails.getRetAuthorID();
+						
+						if(retAuthorID > 0)
+						{
+							booksBrowser.SetAuthorId(retAuthorID);
+						}
+					}
+				}
+			);		
+		
 		booksListPane = new JScrollPane(booksTable);
 		
 		booksListPane.setPreferredSize(new Dimension(1000, 550));

@@ -24,9 +24,8 @@ public class GeekTextFrame extends JFrame implements ActionListener
 	 * 
 	 */
 	private static final long serialVersionUID = -7438737158179176083L;
+	
 	// private variables
-	private String rootURL;
-	//private GridBagConstraints layoutConst = null;
 	private JPanel GeekTextPanel;
 	private JPanel TopNavPanel;
 	private JPanel BottomPanel;
@@ -39,11 +38,8 @@ public class GeekTextFrame extends JFrame implements ActionListener
 	private JButton btnWishList;
 	
 	// constructors
-	public GeekTextFrame(String rootURL)
+	public GeekTextFrame()
 	{
-		// root URL
-		this.rootURL = rootURL;
-
 		// set layout items
 		setTitle("Geek Text");
 
@@ -60,8 +56,6 @@ public class GeekTextFrame extends JFrame implements ActionListener
 		GeekTextPanel.setLayout(gbl_GeekTextPanel);
 		
 		TopNavPanel = new JPanel();
-		//TopNavPanel.setMinimumSize(new Dimension(100, 24));
-		//TopNavPanel.setMaximumSize(new Dimension(32767, 24));
 		GridBagConstraints gbc_TopNavPanel = new GridBagConstraints();
 		gbc_TopNavPanel.insets = new Insets(0, 0, 5, 0);
 		gbc_TopNavPanel.fill = GridBagConstraints.BOTH;
@@ -88,8 +82,6 @@ public class GeekTextFrame extends JFrame implements ActionListener
 		BottomPanel.setLayout(gbl_BottomPanel);
 		
 		LeftNavPanel = new JPanel();
-		//LeftNavPanel.setMaximumSize(new Dimension(130, 32767));
-		//LeftNavPanel.setMinimumSize(new Dimension(130, 100));
 		GridBagConstraints gbc_LeftNavPanel = new GridBagConstraints();
 		gbc_LeftNavPanel.anchor = GridBagConstraints.NORTHWEST;
 		gbc_LeftNavPanel.insets = new Insets(0, 0, 0, 5);
@@ -141,7 +133,6 @@ public class GeekTextFrame extends JFrame implements ActionListener
 		
 		// main data panel
 		MainDataPanel = new JPanel();
-		//MainDataPanel.setPreferredSize(new Dimension(800, 600));
 		GridBagConstraints gbc_MainDataPanel = new GridBagConstraints();
 		gbc_MainDataPanel.anchor = GridBagConstraints.WEST;
 		gbc_MainDataPanel.gridx = 1;
@@ -151,18 +142,24 @@ public class GeekTextFrame extends JFrame implements ActionListener
 		
 		BottomPanel.add(MainDataPanel, gbc_MainDataPanel);
 		
-		JPanel booksBrowserPane = new BookBrowsePane(this.rootURL);
-		GridBagConstraints gbc_booksBrowserPane = new GridBagConstraints();
-		gbc_booksBrowserPane.anchor = GridBagConstraints.NORTHWEST;
-		gbc_booksBrowserPane.gridx = 0;
-		gbc_booksBrowserPane.gridy = 0;
-		MainDataPanel.add(booksBrowserPane, gbc_booksBrowserPane);
-		
+		// by default, browse books on launch
+		BrowseBooks();		
 		
 		// make it visible
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pack();
 		this.setVisible(true);
+	}
+	
+	public void BrowseBooks()
+	{
+		MainDataPanel.removeAll();
+		JPanel booksBrowserPane = new BookBrowsePane();
+		GridBagConstraints gbc_booksBrowserPane = new GridBagConstraints();
+		gbc_booksBrowserPane.anchor = GridBagConstraints.NORTHWEST;
+		gbc_booksBrowserPane.gridx = 0;
+		gbc_booksBrowserPane.gridy = 0;
+		MainDataPanel.add(booksBrowserPane, gbc_booksBrowserPane);
 	}
 	
 	// button code

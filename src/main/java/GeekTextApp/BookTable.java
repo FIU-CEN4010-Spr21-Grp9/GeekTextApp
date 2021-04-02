@@ -33,7 +33,7 @@ public class BookTable extends AbstractTableModel
 	{
 		this.books = books;
 		columns = new String[]{"Cover", "Title", "Publish Date", "Publisher", "Price", "Description"
-				, "ISBN", "ISBN13", "Rating", "Author(s)", "Genre(s)"};
+				, "ISBN", "ISBN13", "Rating", "Author(s)", "Genre(s)", "bookID"};
 		
 		this.size = books.size();
 	}
@@ -60,7 +60,6 @@ public class BookTable extends AbstractTableModel
 		
 		switch(col)
 		{
-			//case 0: return book.getCoverUrl();
 			case 0: return book.getCoverThumb();
 			case 1: return book.getTitle();
 			case 2: return book.getPublishDate();
@@ -69,10 +68,10 @@ public class BookTable extends AbstractTableModel
 			case 5: return book.getDescription();
 			case 6: return book.getIsbn();
 			case 7: return book.getIsbn13();
-			//case 8: return book.getCoverUrl();
 			case 8: return book.getRating();
 			case 9: return book.getAuthorList();
 			case 10: return book.getGenreList();
+			case 11: return book.getBookID();
 			
 			// default
 			default: return null;
@@ -82,7 +81,6 @@ public class BookTable extends AbstractTableModel
 	
 	public String getColumnName(int columnIndex)
 	{
-	    //System.out.println("in");
 	    return columns[columnIndex];
 	}
 

@@ -15,12 +15,12 @@ package GeekTextApp;
 // main entry point
 public class GeekTextApp
 {
-private static String ROOT_URL = "http://localhost:8080";
+	public static final String ROOT_URL = "http://localhost:8080";
 	
 	@SuppressWarnings("unused")
 	public static void main(String[] args)
 	{
 		// Creates new GeekTextApp
-		GeekTextFrame geekText = new GeekTextFrame(ROOT_URL);
+		GeekTextFrame geekText = new GeekTextFrame();
 	}	
 }

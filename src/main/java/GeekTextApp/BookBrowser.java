@@ -53,11 +53,8 @@ public class BookBrowser
 	private String[] sortOptions = {"", "Title", "Title (desc)", "Author", "Author (desc)", "Price", "Price (desc)"
 			, "Rating", "Rating (desc)", "Date", "Date (desc)"}; // declare here so indexes are always the same
 	
-	// public variables
-	// public JTable booksTable;
-	
 	// constructors
-	public BookBrowser(String rootURL)
+	public BookBrowser()
 	{
 		// internal values
 		this.rowsPerPage = 20;
@@ -68,21 +65,21 @@ public class BookBrowser
 		this.sortIndex = 0;
 				
 		// root URL
-		this.rootURL = rootURL;
+		this.rootURL = GeekTextApp.ROOT_URL;
 		
 		// get genres list for browsing
 		if(genreList == null)
 		{
-			genreList = new GenreList(rootURL);
+			genreList = new GenreList();
 		}
 		
 		// default to top sellers until another option is picked
 		if(books == null)
 		{
-			// ListBooksByTopSellers();
+			ListBooksByTopSellers();
 			
 			// Test other book browsing (before GUI code is fully implemented)
-			this.genreID = 1; ListBooksByGenreId();
+			// this.genreID = 1; ListBooksByGenreId();
 			// this.authorID = 179677; ListBooksByAuthorId(); // Chris' code not merged yet
 			// this.rating = 3; ListBooksByRating();
 		}
@@ -162,7 +159,7 @@ public class BookBrowser
 	public void resizeColumnWidth(JTable table)
 	{
 	    final TableColumnModel columnModel = table.getColumnModel();
-	    int[] columnWidths = new int[]{100, 300, 100, 100, 50, 200, 50, 60, 50, 100, 100};
+	    int[] columnWidths = new int[]{100, 300, 100, 100, 50, 200, 50, 60, 50, 100, 100, 20};
 	    
 	    for (int column = 0; column < table.getColumnCount(); column++)
 	    {
