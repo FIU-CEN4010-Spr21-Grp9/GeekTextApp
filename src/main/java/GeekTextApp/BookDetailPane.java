@@ -40,7 +40,10 @@ public class BookDetailPane extends JDialog implements ActionListener, ItemListe
 			this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		};
 		
-		
+		public int getAuthorID()
+		{
+			return AuthorID;
+		}
 	}
 	
 	/**
@@ -97,22 +100,24 @@ public class BookDetailPane extends JDialog implements ActionListener, ItemListe
 		{
 			AuthorLabel lblAuthor = new AuthorLabel(bookDetails.getAuthor(i));
 			GridBagConstraints gbc_lblAuthors = new GridBagConstraints();
-			gbc_lblAuthors.gridx = 1;
+			gbc_lblAuthors.gridx = i + 1;
 			gbc_lblAuthors.gridy = 1;
 			lblAuthor.addMouseListener(
 					new java.awt.event.MouseAdapter()
 					{
 						@Override
-						public void MouseClicked(java.awt.event.MouseEvent evt)
+						public void mouseClicked(java.awt.event.MouseEvent evt)
 						{
-							
+							retAuthorID = lblAuthor.getAuthorID();
+							dispose();
 						}
 					}
 				);
 			mainPanel.add(lblAuthor, gbc_lblAuthors);
 		}
 		
-		
+		pack();
+		setVisible(true);
 	};
 	
 	

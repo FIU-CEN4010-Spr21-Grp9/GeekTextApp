@@ -260,6 +260,8 @@ public class BookBrowsePane extends JPanel implements ActionListener, ItemListen
 						if(retAuthorID > 0)
 						{
 							booksBrowser.SetAuthorId(retAuthorID);
+							
+							refreshPanel();
 						}
 					}
 				}

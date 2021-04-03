@@ -62,7 +62,7 @@ public class BookDetail
 	
 	private void GetAuthorInfo(int bookID)
 	{
-		fullURL = rootURL + "/authors/query/viaproc/byBookId?bookID={id}";
+		fullURL = rootURL + "/authors/query/viaproc/byBookID?bookID={id}";
 		
 		ResponseEntity<List<Author>> responseEntity = restTemplate.exchange(
 				fullURL,
