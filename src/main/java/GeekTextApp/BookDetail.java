@@ -97,4 +97,14 @@ public class BookDetail
 	{
 		return authors.get(i);
 	}
+	
+	public String getAuthorName(int i)
+	{
+		return authors.get(i).getAuthorName();
+	}
+	
+	public String getAuthorBio(int i)
+	{
+		return authors.get(i).getBio();
+	}
 }
