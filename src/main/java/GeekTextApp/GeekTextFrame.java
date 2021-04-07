@@ -4,8 +4,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 //import java.util.List;
+import java.util.List;
 
 import javax.swing.*;
+
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 /**
 *  Title: GeekTextApp
@@ -122,6 +128,39 @@ public class GeekTextFrame extends JFrame implements ActionListener
 		LeftNavPanel.add(btnShopCart, gbc_btnShopCart);
 		
 		btnWishList = new JButton("Wish List");
+		btnWishList.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Wishlist Pressed");
+				int userID = 1;
+				String fullURL;
+				RestTemplate restTemplate = new RestTemplate();
+				List<Wishlist> wishlist;
+				fullURL = GeekTextApp.ROOT_URL + "/wishlist/items?userID={id}";
+				System.out.println(fullURL);
+				
+				ResponseEntity<List<Wishlist>> responseEntity = restTemplate.exchange(
+						fullURL,
+					    HttpMethod.POST,
+					    null,
+					    new ParameterizedTypeReference<List<Wishlist>>() {},
+					    userID);
+						
+						wishlist = responseEntity.getBody();
+						
+						
+						for(int i = 0; i < wishlist.size(); i++)
+					       {
+					    	   System.out.println(wishlist.get(i));
+					       }
+					  
+				
+				// empty the book in case it is not our first search
+				
+			}
+				
+				
+			
+		});
 		btnWishList.setPreferredSize(new Dimension(120, 24));
 		btnWishList.setMinimumSize(new Dimension(120, 24));
 		btnWishList.setMaximumSize(new Dimension(120, 24));
