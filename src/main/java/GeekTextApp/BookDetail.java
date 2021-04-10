@@ -1,11 +1,14 @@
 package GeekTextApp;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+import java.util.Objects;
+
 
 /**
 *  Title: GeekTextApp
@@ -26,6 +29,7 @@ public class BookDetail
 	private final RestTemplate restTemplate = new RestTemplate();
 	private Book book;
 	private List<Author> authors;
+	private List<Review> reviews;
 	
 	// CHRIS' CODE GOES HERE
 	public BookDetail(Integer bookID)
@@ -33,6 +37,7 @@ public class BookDetail
 		this.rootURL = GeekTextApp.ROOT_URL;
 		GetBookInfo(bookID);
 		GetAuthorInfo(bookID);		
+		GetReviewInfo(bookID); 		//ERROR IS HERE wont let window open
 		// do constructor
 	}
 	
@@ -59,6 +64,33 @@ public class BookDetail
 		
 		book = responseEntity.getBody().get(0);
 	}
+	
+	
+	
+	
+	private void GetReviewInfo(int bookID)
+	{
+		fullURL = rootURL + "/review/query/viaproc/bybookid?bookID={id}";
+		
+		ResponseEntity<List<Review>> responseEntity = restTemplate.exchange(
+				fullURL,
+			    HttpMethod.GET,
+			    null,
+			    new ParameterizedTypeReference<List<Review>>() {}
+				, bookID
+			  );
+		
+		// empty the book in case it is not our first search
+		if(reviews != null)
+		{
+			reviews = null;
+		}
+		
+		reviews = responseEntity.getBody();
+	}
+	
+	
+	
 	
 	private void GetAuthorInfo(int bookID)
 	{
@@ -107,4 +139,24 @@ public class BookDetail
 	{
 		return authors.get(i).getBio();
 	}
+
+	public Book getBook() {
+		return book;
+	}
+
+	public Review getReviews(int i) {
+		return reviews.get(i);
+	}
+	
+	public int  getReviewCount() {	
+		return reviews.size();	
+	}
+	
+	public void printAll() {
+		for(int i = 0; i < reviews.size() && i < 25; i++) {
+			System.out.println(reviews.get(i).toString());
+		}
+	}
+	
+	
 }

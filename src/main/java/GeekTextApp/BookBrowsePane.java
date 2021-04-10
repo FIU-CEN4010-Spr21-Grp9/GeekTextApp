@@ -255,7 +255,7 @@ public class BookBrowsePane extends JPanel implements ActionListener, ItemListen
 						// this return value defaults to 0
 						// if the user clicks on the author name on the details
 						// then the details page will close and return the authorID
-						int retAuthorID = bookDetails.getRetAuthorID();
+						int retAuthorID = bookDetails.getRetAuthorID();                     ///CALLLLLLLLLLLLLLLLLLLLLL
 						
 						if(retAuthorID > 0)
 						{
