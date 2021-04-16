@@ -12,7 +12,7 @@ public class Wishlist
 
 	private Integer userID;
 
-	private String name;
+	private String wishlistName;
 
 	private String title;
 
@@ -21,7 +21,7 @@ public class Wishlist
 
 	public String toString()
 	{
-		return String.format("Wishlist_ItemID: %d, UserID: %d, Name: %s, Title: %s, BookID: %d.",wishlist_itemID, userID, name, title, bookID);
+		return String.format("Wishlist_ItemID: %d, UserID: %d, Name: %s, Title: %s, BookID: %d.",wishlist_itemID, userID, wishlistName, title, bookID);
 	}
 	
 	public Wishlist(int wishlist_itemID, int wishlistID, int userID,  String wishlistName, String title, int bookID)
@@ -29,7 +29,7 @@ public class Wishlist
 		this.wishlist_itemID = wishlist_itemID;
 		this.wishlistID = wishlistID;
 		this.userID = userID;
-		this.name = wishlistName;
+		this.wishlistName = wishlistName;
 		this.title = title;
 		this.bookID = bookID;
 		
@@ -50,7 +50,7 @@ public class Wishlist
 	
 	public String getWishlistName()
 	{
-		return name;
+		return wishlistName;
 	}
 	
 	public int getBookID()
@@ -74,7 +74,7 @@ public class Wishlist
 
 	public void setWishListName(String wishlistName)
 	{
-		this.name = wishlistName;
+		this.wishlistName = wishlistName;
 	}
 	
 	public void setBookID(int bookID)

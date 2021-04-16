@@ -19,9 +19,18 @@ import java.awt.Component;
 public class WishlistBrowserPane extends JPanel implements ActionListener, ItemListener {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 954147428403751248L;
+	
+	/**
 	 * Create the panel.
 	 */
 	public WishlistBrowserPane() {
+		
+		
+		
+		
 		setAlignmentY(Component.TOP_ALIGNMENT);
 		setAlignmentX(Component.LEFT_ALIGNMENT);
 		setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
