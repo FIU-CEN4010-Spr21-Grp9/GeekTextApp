@@ -278,9 +278,9 @@ public class WishlistBrowserFrame extends JFrame {
 ////				WishlistBox = new JComboBox(names.toArray());
 ////				
 //				
-//				String input = JOptionPane.showInputDialog(null, "Add book");
-//				int i=Integer.parseInt(input);
-//				addItem(i, userID);
+				String input = JOptionPane.showInputDialog(null, "Add book");
+				int i=Integer.parseInt(input);
+				addItem(i, userID);
 			}
 		});
 		panel.add(btnNewButton);
