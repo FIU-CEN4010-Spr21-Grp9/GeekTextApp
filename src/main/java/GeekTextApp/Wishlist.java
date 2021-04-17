@@ -21,7 +21,7 @@ public class Wishlist
 
 	public String toString()
 	{
-		return String.format("Wishlist_ItemID: %d, UserID: %d, Name: %s, Title: %s, BookID: %d.",wishlist_itemID, userID, wishlistName, title, bookID);
+		return String.format("Title: %s, BookID: %d.", title, bookID);
 	}
 	
 	public Wishlist(int wishlist_itemID, int wishlistID, int userID,  String wishlistName, String title, int bookID)

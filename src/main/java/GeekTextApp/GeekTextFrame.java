@@ -130,44 +130,9 @@ public class GeekTextFrame extends JFrame implements ActionListener
 		btnWishList = new JButton("Wish List");
 		btnWishList.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
-				System.out.println("Wishlist Pressed");
-				
 				WishlistBrowserFrame panel = new WishlistBrowserFrame();
 				panel.setVisible(true);
-//				int userID = 2;
-//				String name = "button";
-//				int wishlistID = 6;
-//				int bookID = 599270;
-//				int wishlistItemID;
-//				String fullURL;
-//				RestTemplate restTemplate = new RestTemplate();
-//				List<Wishlist> wishlist;
-//				fullURL = GeekTextApp.ROOT_URL + "/wishlist/insert?userID={id}&bookID={id}&wishlistID={id}";
-//				System.out.println(fullURL);
-//				
-//				ResponseEntity<List<Wishlist>> responseEntity = restTemplate.exchange(
-//						fullURL,
-//					    HttpMethod.POST,
-//					    null,
-//					    new ParameterizedTypeReference<List<Wishlist>>() {},
-//					    userID,bookID,wishlistID);
-//						
-//						wishlist = responseEntity.getBody();
-//						
-//						
-//						for(int i = 0; i < wishlist.size(); i++)
-//					       {
-//					    	   System.out.println(wishlist.get(i));
-//					       }
-//					  
-				
-				// empty the book in case it is not our first search
-				
 			}
-				
-				
-			
 		});
 		btnWishList.setPreferredSize(new Dimension(120, 24));
 		btnWishList.setMinimumSize(new Dimension(120, 24));
