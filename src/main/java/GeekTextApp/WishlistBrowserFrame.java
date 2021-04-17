@@ -44,7 +44,9 @@ public class WishlistBrowserFrame extends JFrame {
 	private JPopupMenu menu;
 	private WishlistController controller = new WishlistController();
 	private JComboBox WishlistBox;
-	
+	private static int currentList = -1;
+	private List<WishlistName> list;
+	private JLabel DisplayList;
 	/**
 	 * Launch the application.
 	 */
@@ -67,8 +69,7 @@ public class WishlistBrowserFrame extends JFrame {
 	public WishlistBrowserFrame() {
 		
 		int userID = getID();
-		List<WishlistName> list = controller.allLists(userID);
-		
+		list = controller.allLists(userID);
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -95,61 +96,41 @@ public class WishlistBrowserFrame extends JFrame {
 		JButton btnNewList = new JButton("New Wishlist");
 		TopPanel.add(btnNewList);
 		
-		JLabel lblWishlist = new JLabel("Wish List: ");
-		TopPanel.add(lblWishlist);
-		
-		
-		
-//		private class GenreListBox extends JComboBox<String>
-//		{
-//			/**
-//			 * 
-//			 */
-//			private static final long serialVersionUID = 2049325020252386788L;
-//
-//			public GenreListBox(final String[] genreList)
-//			{
-//				SetItemList(genreList);
-//			};
-//			
-//			public void SetItemList(final String[] genreList)
-//			{
-//				for(int i = 0; i < genreList.length; i++)
-//				{
-//					addItem(genreList[i]);
-//				}
-//			}
-//		private class wishlistLists() {
-		List<String> names = new ArrayList<String>();
-		
-		for(int i = 0; i < list.size(); i++)
-		       {
-				System.out.println(list.get(i).toString());
-		    	names.add(list.get(i).getWishlistName());
-		       }
-		
-		WishlistBox = new JComboBox(names.toArray());
-		
-//		}
-		TopPanel.add(WishlistBox);
+//		JLabel lblWishlist = new JLabel("Wish List: ");
+//		TopPanel.add(lblWishlist);
+//	
+//		List<String> names = new ArrayList<String>();
+//		
+//		for(int i = 0; i < list.size(); i++)
+//		       {
+//				System.out.println(list.get(i).toString());
+//		    	names.add(list.get(i).getWishlistName());
+//		       }
+//		
+//		WishlistBox = new JComboBox(names.toArray());
+//		
+////		}
+//		TopPanel.add(WishlistBox);
 		
 		JButton btnDeleteList = new JButton("Delete Wishist");
 		btnDeleteList.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println(WishlistBox.getSelectedIndex());
-				System.out.println(list.get(WishlistBox.getSelectedIndex()).getWishlistID());
-				int action = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete: " + list.get(WishlistBox.getSelectedIndex()).getWishlistName());
+				updateList(userID);
+				System.out.println(currentList);
+				System.out.println(list.get(currentList).getWishlistID());
+				int action = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete: " + list.get(currentList).getWishlistName());
 				System.out.println(action);
 				if(action == 0)
 				{
-					System.out.println("Deleting wishlist with ID: " + list.get(WishlistBox.getSelectedIndex()).getWishlistID());
-					controller.deleteList(userID,list.get(WishlistBox.getSelectedIndex()).getWishlistID());
-					refreshWishlists();
+					System.out.println("Deleting wishlist with ID: " + list.get(currentList).getWishlistID());
+					controller.deleteList(userID,list.get(currentList).getWishlistID());
+					updateList(userID);
 				}
 			}
 		});
 		btnNewList.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				updateList(userID);
 				List<WishlistName> list2 = controller.allLists(userID);
 //				refreshWishlists();
 				System.out.println(list2.size());
@@ -160,30 +141,26 @@ public class WishlistBrowserFrame extends JFrame {
 				if (name != null)
 				{
 					controller.newList(userID, name);
+					updateList(userID);
 				}
-				System.out.println("wishlist name: " + name);
+				
 				}
 				
 			}
 			});
-		TopPanel.add(btnDeleteList);
 		
-		JLabel label_1 = new JLabel("");
-		GridBagConstraints gbc_label_1 = new GridBagConstraints();
-		gbc_label_1.fill = GridBagConstraints.BOTH;
-		gbc_label_1.insets = new Insets(0, 0, 5, 0);
-		gbc_label_1.gridx = 3;
-		gbc_label_1.gridy = 1;
-		contentPane.add(label_1, gbc_label_1);
+		DisplayList = new JLabel("Current List: N/A");
+		TopPanel.add(DisplayList);
+		TopPanel.add(btnDeleteList);
 		
 		JPanel DataPanel = new JPanel();
 		GridBagConstraints gbc_DataPanel = new GridBagConstraints();
-		gbc_DataPanel.gridheight = 2;
+		gbc_DataPanel.gridheight = 3;
 		gbc_DataPanel.gridwidth = 4;
 		gbc_DataPanel.fill = GridBagConstraints.BOTH;
 		gbc_DataPanel.insets = new Insets(0, 0, 5, 5);
 		gbc_DataPanel.gridx = 0;
-		gbc_DataPanel.gridy = 2;
+		gbc_DataPanel.gridy = 1;
 		contentPane.add(DataPanel, gbc_DataPanel);
 		DataPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
@@ -215,28 +192,35 @@ public class WishlistBrowserFrame extends JFrame {
 		JButton LoadList = new JButton("Load Wishlist");
 		LoadList.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+			currentList	= JOptionPane.showOptionDialog(null, "Choose wishlist to load", "Load Wishlist",
+				        JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+				        null, list.toArray(), list.get(0).getWishlistName());
+			
+			if (currentList > -1)
+			{	
+				DisplayList.setText("Current List: " + list.get(currentList).getWishlistName());
 				DefaultListModel<String> DLM = new DefaultListModel<String>();
-				List<Wishlist> items = controller.list(userID, list.get(WishlistBox.getSelectedIndex()).getWishlistID());
+				List<Wishlist> items = controller.list(userID, list.get(currentList).getWishlistID());
 				for(int i = 0; i < items.size(); i++)
 				{
 					DLM.addElement(items.get(i).toString());
 				}
 				WishlistItems.setModel(DLM);
 			}
+			}
 		});
 		
 		SendToCart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				List<WishlistName> list = controller.allLists(userID);
-				List<Wishlist> items = controller.list(userID, list.get(WishlistBox.getSelectedIndex()).getWishlistID());
+				updateList(userID);
+				List<Wishlist> items = controller.list(userID, list.get(currentList).getWishlistID());
 				JOptionPane.showMessageDialog(null, "Sending Book with ID: " + items.get(WishlistItems.getSelectedIndex()).getBookID() + " to Shopping cart");
 			}
 		});
 		MoveItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				List<WishlistName> list = controller.allLists(userID);
-		
-				List<Wishlist> items = controller.list(userID, list.get(WishlistBox.getSelectedIndex()).getWishlistID());
+				updateList(userID);
+				List<Wishlist> items = controller.list(userID, list.get(currentList).getWishlistID());
 				
 				 int response = JOptionPane.showOptionDialog(null, "Move Item to what list?", "Move",
 					        JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
@@ -246,17 +230,18 @@ public class WishlistBrowserFrame extends JFrame {
 				{
 					controller.move(userID,items.get(WishlistItems.getSelectedIndex()).getWishlistItemID(),
 							list.get(response).getWishlistID());
-					System.out.println(userID + "|" + list.get(response).getWishlistID() + "|" +
-							items.get(WishlistItems.getSelectedIndex()).getWishlistItemID());
+					//System.out.println(userID + "|" + list.get(response).getWishlistID() + "|" +
+						//	items.get(WishlistItems.getSelectedIndex()).getWishlistItemID());
 				}
 			}
 		});
 		DeleteItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				List<Wishlist> items = controller.list(userID, list.get(WishlistBox.getSelectedIndex()).getWishlistID());
+				updateList(userID);
+				List<Wishlist> items = controller.list(userID, list.get(currentList).getWishlistID());
 				int delete = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete: " + items.get(WishlistItems.getSelectedIndex()).getBookName());
 				if (delete == 0) {
-					System.out.println("Deleting book with ID: " + items.get(WishlistItems.getSelectedIndex()).getBookID());
+					//System.out.println("Deleting book with ID: " + items.get(WishlistItems.getSelectedIndex()).getBookID());
 					controller.delete(userID, items.get(WishlistItems.getSelectedIndex()).getWishlistItemID());
 				}
 			}
@@ -294,8 +279,8 @@ public class WishlistBrowserFrame extends JFrame {
 	}
 	public void addItem(int bookID, int userID)
 	{
-		List<WishlistName> list = controller.allLists(userID);
-		 int response = JOptionPane.showOptionDialog(null, "Add item to what list?", "Add",
+		updateList(userID);
+		int response = JOptionPane.showOptionDialog(null, "Add item to what list?", "Add",
 			        JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
 			        null, list.toArray(), list.get(0).getWishlistName());
 		System.out.println("Response: " + response);
@@ -304,6 +289,10 @@ public class WishlistBrowserFrame extends JFrame {
 			controller.insert(userID,bookID,list.get(response).getWishlistID());
 
 		}
+	}
+	public void updateList(int userID)
+	{
+		list = controller.allLists(userID);
 	}
 	
 }
