@@ -4,8 +4,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 //import java.util.List;
+import java.util.List;
 
 import javax.swing.*;
+
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 /**
 *  Title: GeekTextApp
@@ -122,6 +128,12 @@ public class GeekTextFrame extends JFrame implements ActionListener
 		LeftNavPanel.add(btnShopCart, gbc_btnShopCart);
 		
 		btnWishList = new JButton("Wish List");
+		btnWishList.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				WishlistBrowserFrame panel = new WishlistBrowserFrame();
+				panel.setVisible(true);
+			}
+		});
 		btnWishList.setPreferredSize(new Dimension(120, 24));
 		btnWishList.setMinimumSize(new Dimension(120, 24));
 		btnWishList.setMaximumSize(new Dimension(120, 24));
