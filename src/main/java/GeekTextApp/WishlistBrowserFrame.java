@@ -262,10 +262,10 @@ public class WishlistBrowserFrame extends JFrame {
 			}
 		});
 		panel.add(LoadList);
-//		
-//		JButton btnNewButton = new JButton("New button");
-//		btnNewButton.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent arg0) {
+		
+		JButton btnNewButton = new JButton("Add Book By ID");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
 ////				List<WishlistName> list = controller.allLists(userID);
 ////				List<String> names = new ArrayList<String>();
 ////				
@@ -278,12 +278,12 @@ public class WishlistBrowserFrame extends JFrame {
 ////				WishlistBox = new JComboBox(names.toArray());
 ////				
 //				
-////				String input = JOptionPane.showInputDialog(null, "Add book");
-////				int i=Integer.parseInt(input);
-////				addItem(i, userID);
-//			}
-//		});
-//		panel.add(btnNewButton);
+//				String input = JOptionPane.showInputDialog(null, "Add book");
+//				int i=Integer.parseInt(input);
+//				addItem(i, userID);
+			}
+		});
+		panel.add(btnNewButton);
 	}
 	public int getID() {return 2;}
 	public void refreshWishlists() 
